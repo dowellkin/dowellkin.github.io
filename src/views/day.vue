@@ -5,12 +5,20 @@
 		</div>
 		<div class="day__content">
 			<div class="day__time-column">
+				<div
+					v-if="index == getDay"
+					class="day__time-item day__time-item--current day__time-current"
+					:style="{'transform': 'translateY('+getBias+'px)'}"
+					>{{getTime}}</div>
 				<div class="day__time-item time__row" v-for="(time, index) in getLinesTime" :key="index">{{time}}</div>
-				<div v-if="index == getDay" class="day__time-item day__time-item--current">{{getTime}}</div>
 			</div>
 			<div class="day__lines-column">
+				<div
+					v-if="index == getDay"
+					class="day__lines-item day__lines-item--current day__time-current"
+					:style="{'transform': 'translateY('+getBias+'px)'}"
+					></div>
 				<div class="day__lines-item time__row" v-for="(time, index) in getLinesTime" :key="index"></div>
-				<div v-if="index == getDay" class="day__lines-item day__lines-item--current"></div>
 			</div>
 		</div>
 	</div>
@@ -31,11 +39,19 @@ export default {
 			}
 			return ret;
 		},
-		...mapGetters(["getTime", "getDay"])
+		getBias(){
+			// const column = document.querySelector(".day__lines-column");
+			const ret = this.remap(this.getEncodedTime, 8*60, 20*60, 0, 360)
+			console.log(this.getEncodedTime)
+			console.log(8*60)
+			console.log(20*60)
+			return ret
+		},
+		...mapGetters(["getTime", "getDay", "getEncodedTime"])
 	},
-	data(){
-		return {
-			
+	methods: {
+		remap(value, low1, high1, low2, high2){
+			return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 		}
 	}
 }
@@ -45,6 +61,7 @@ export default {
 	.day{
 		width: 300px;
 		margin-bottom: 10px;
+		/* overflow: hidden; */
 	}
 	.day__title{
 		margin-bottom: 5px;
@@ -84,6 +101,8 @@ export default {
 		font-weight: bold;
 		right: 0;
 		background-color: rgba(255,255,255,.5);
+		z-index: 1;
+		font-size: .85rem;
 	}
 	.day__lines-item--current{
 		width: 100%;
@@ -93,6 +112,12 @@ export default {
 		top: 0;
 		left: 0;
 		right: 0;
+		z-index: 1;
+	}
+
+	.day__time-current{
+		/* transform: translateY(); */
+		transition: transform .1s linear;
 	}
 
 	.day__lines-item--current::before{
