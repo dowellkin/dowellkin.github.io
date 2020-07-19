@@ -31,6 +31,12 @@ export default {
 	props: ['day', 'index'],
 	created(){
 	},
+	data(){
+		return {
+			dayStart: 8,
+			dayEnd: 20
+		}
+	},
 	computed:{
 		getLinesTime(){
 			const ret = [];
@@ -40,11 +46,9 @@ export default {
 			return ret;
 		},
 		getBias(){
-			// const column = document.querySelector(".day__lines-column");
-			const ret = this.remap(this.getEncodedTime, 8*60, 20*60, 0, 360)
-			console.log(this.getEncodedTime)
-			console.log(8*60)
-			console.log(20*60)
+			const column = document.querySelectorAll(".day__lines-item")[1];
+			const columnHeight = column.offsetHeight;
+			const ret = this.remap(this.getEncodedTime, this.dayStart*60, this.dayEnd*60, 0, (this.dayEnd-this.dayStart)*columnHeight)
 			return ret
 		},
 		...mapGetters(["getTime", "getDay", "getEncodedTime"])
@@ -61,7 +65,14 @@ export default {
 	.day{
 		width: 300px;
 		margin-bottom: 10px;
-		/* overflow: hidden; */
+		overflow: hidden;
+		padding: 10px 10px;
+		border-radius: 5px;
+		box-shadow: 0px 0px 0px 1px rgba(0,0,0,.0);
+		transition: box-shadow .1s ease;
+	}
+	.day:hover{
+		box-shadow: 0px 0px 0px 1px rgba(0,0,0,.2);
 	}
 	.day__title{
 		margin-bottom: 5px;
