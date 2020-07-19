@@ -31,9 +31,9 @@ export default {
 			return `${getters.getHours}:${getters.getMinutes}`
 		},
 		getDay(state) {
-			state
-			return 0
-			// return state.date.getDay() == 0 ? 6 : state.date.getDay() - 1;
+			// state
+			// return 0
+			return state.date.getDay() == 0 ? 6 : state.date.getDay() - 1;
 		},
 		getEncodedTime(state, getters) {
 			return (parseInt(getters.getHours, 10) * 60) + parseInt(getters.getMinutes, 10)
