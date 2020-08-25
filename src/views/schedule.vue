@@ -19,8 +19,22 @@ export default {
 
 <style>
 	.schedule {
-		display: flex;
+		display: grid;
 		flex-wrap: wrap;
 		justify-content: space-around;
+		justify-items: center;
+		grid-gap: 20px;
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	@media screen and (max-width: 1100px){
+		.schedule{
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media screen and (max-width: 768px){
+		.schedule{
+			grid-template-columns: 1fr;
+		}
 	}
 </style>
