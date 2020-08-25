@@ -13,13 +13,14 @@ import 'firebase/database'
 Vue.use(Antd);
 
 firebase.initializeApp({
-	apiKey: "AIzaSyBha4mcbQX96CwqAvl2j-1ja3E-N8ExKmk",
-	authDomain: "sw-721.firebaseapp.com",
-	databaseURL: "https://sw-721.firebaseio.com",
-	projectId: "sw-721",
-	storageBucket: "sw-721.appspot.com",
-	messagingSenderId: "30613357636",
-	appId: "1:30613357636:web:4b2b178ab9168ad5766811"
+	apiKey: "AIzaSyAjCGyDv1sCKpl4UoCvy9jVrA5NG3j0Yp8",
+	authDomain: "dowellkin-schedule.firebaseapp.com",
+	databaseURL: "https://dowellkin-schedule.firebaseio.com",
+	projectId: "dowellkin-schedule",
+	storageBucket: "dowellkin-schedule.appspot.com",
+	messagingSenderId: "164186141581",
+	appId: "1:164186141581:web:e9a87433e89080ee5e43c4",
+	measurementId: "G-7BQXZ95QYH"
 });
 
 

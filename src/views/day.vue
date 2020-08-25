@@ -40,7 +40,7 @@ export default {
 	computed:{
 		getLinesTime(){
 			const ret = [];
-			for(let i = 8; i <= 20; i++){
+			for(let i = this.dayStart; i <= this.dayEnd; i++){
 				ret.push(`${i}:00`);
 			}
 			return ret;
@@ -51,7 +51,10 @@ export default {
 			const ret = this.remap(this.getEncodedTime, this.dayStart*60, this.dayEnd*60, 0, (this.dayEnd-this.dayStart)*columnHeight)
 			return ret
 		},
-		...mapGetters(["getTime", "getDay", "getEncodedTime"])
+		isNeedToShowMark(index){
+			return index == this.getDay && this.getHours >= this.dayStart && this.getHours <= this.dayEnd
+		},
+		...mapGetters(["getTime", "getDay", "getEncodedTime", "getHours"])
 	},
 	methods: {
 		remap(value, low1, high1, low2, high2){

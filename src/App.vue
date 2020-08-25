@@ -19,7 +19,7 @@
         </div>
       </a-layout-content>
       <a-layout-footer style="text-align: center">
-        Schedule ©2020 Created by Korolev Alexandr
+        Schedule ©2020 Created by <a href="tg://resolve?domain=dowellkin">Korolev Alexandr</a>
       </a-layout-footer>
     </a-layout>
   </a-layout>
