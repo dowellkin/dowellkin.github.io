@@ -31,7 +31,14 @@
 							'background-color': getBackgroundColor(task),
 							'border': `1px solid ${getBorderColor(task)}`
 						}">
-						<span class="task__time">({{task.startTime}}-{{task.endTime}})</span> {{task.title}}
+						<a-popover title="1 пара (45 мин.)">
+							<template slot="content">
+								{{task.title}}
+							</template>
+							<div class="tasl__content">
+								<span class="task__time">({{task.startTime}}-{{task.endTime}})</span> {{lessonTitle(task.title)}}
+							</div>
+						</a-popover>
 					</div>
 				</div>
 			</div>
@@ -110,6 +117,13 @@ export default {
 		getBorderColor(task){
 			const color = this.parseHexColor(task.color);
 			return `rgb(${color[0]},${color[1]},${color[2]})`;
+		},
+		lessonTitle(title){
+			if(title.length > 22){
+				const elems = title.match(/\([А-Я]*\)/)[0];
+				return title.split(" ").map(el => el[0].toUpperCase()).join("") + elems;
+			}
+			return title
 		}
 	}
 }
