@@ -4,7 +4,7 @@ export default {
 		async loadSchedule(state) {
 			const db = firebase.database()
 
-			const ans = await db.ref('/').once("value")
+			const ans = await db.ref('/regular').once("value")
 			state.commit('saveSchedule', ans.val())
 		},
 	},

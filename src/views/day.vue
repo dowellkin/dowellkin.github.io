@@ -6,19 +6,34 @@
 		<div class="day__content">
 			<div class="day__time-column">
 				<div
-					v-if="index == getDay"
+					v-if="isNeedToShowMark(index)"
 					class="day__time-item day__time-item--current day__time-current"
 					:style="{'transform': 'translateY('+getBias+'px)'}"
 					>{{getTime}}</div>
 				<div class="day__time-item time__row" v-for="(time, index) in getLinesTime" :key="index">{{time}}</div>
 			</div>
-			<div class="day__lines-column">
-				<div
-					v-if="index == getDay"
-					class="day__lines-item day__lines-item--current day__time-current"
-					:style="{'transform': 'translateY('+getBias+'px)'}"
-					></div>
-				<div class="day__lines-item time__row" v-for="(time, index) in getLinesTime" :key="index"></div>
+			<div class="day__main">
+				<div class="day__lines-column">
+					<div
+						v-if="isNeedToShowMark(index)"
+						class="day__lines-item day__lines-item--current day__time-current"
+						:style="{'transform': 'translateY('+getBias+'px)'}"
+						></div>
+					<div class="day__lines-item time__row" v-for="(time, index) in getLinesTime" :key="index"></div>
+				</div>
+				<div class="day__task-wrapper">
+					<div
+						v-for="(task, index) in day.tasks"
+						:key="index" class="day__task task"
+						:style="{
+							'top': `${getTopBias(task)}px`,
+							'height': `${getTaskHight(task)}px`,
+							'background-color': getBackgroundColor(task),
+							'border': `1px solid ${getBorderColor(task)}`
+						}">
+						<span class="task__time">({{task.startTime}}-{{task.endTime}})</span> {{task.title}}
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -46,19 +61,54 @@ export default {
 			return ret;
 		},
 		getBias(){
-			const column = document.querySelectorAll(".day__lines-item")[1];
-			const columnHeight = column.offsetHeight;
-			const ret = this.remap(this.getEncodedTime, this.dayStart*60, this.dayEnd*60, 0, (this.dayEnd-this.dayStart)*columnHeight)
-			return ret
-		},
-		isNeedToShowMark(index){
-			return index == this.getDay && this.getHours >= this.dayStart && this.getHours <= this.dayEnd
+			return this.calculateBias(this.getEncodedTime)
 		},
 		...mapGetters(["getTime", "getDay", "getEncodedTime", "getHours"])
 	},
 	methods: {
+		isNeedToShowMark(index){
+			const rules = [
+				index == this.getDay,
+				this.getHours >= this.dayStart,
+				this.getHours <= this.dayEnd
+			]
+			const result = rules.every(el=> el)
+			return result;
+		},
 		remap(value, low1, high1, low2, high2){
 			return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+		},
+		calculateBias(encodedTime){
+			const column = document.querySelectorAll(".day__lines-item")[1];
+			const columnHeight = column.offsetHeight;
+			const ret = this.remap(encodedTime, this.dayStart*60, this.dayEnd*60, 0, (this.dayEnd-this.dayStart)*columnHeight)
+			return ret
+		},
+		getTopBias(task){
+			const time = task.startTime.split(":");
+			const encodedTime = parseInt(time[0], 10)*60 + parseInt(time[1], 10);
+			
+			return this.calculateBias(encodedTime);
+		},
+		getTaskHight(task){
+			const time = task.endTime.split(":");
+			const encodedTime = parseInt(time[0], 10)*60 + parseInt(time[1], 10);
+			return Math.ceil(this.calculateBias(encodedTime) - this.getTopBias(task));
+		},
+		parseHexColor(hexColorString){
+			const noStripes = hexColorString.replace("#", "");
+			const r = parseInt(noStripes[0]+noStripes[1], 16);
+			const g = parseInt(noStripes[2]+noStripes[3], 16);
+			const b = parseInt(noStripes[4]+noStripes[5], 16);
+			return [r,g,b];
+		},
+		getBackgroundColor(task){
+			const color = this.parseHexColor(task.color);
+			return `rgba(${color[0]},${color[1]},${color[2]},.8)`;
+		},
+		getBorderColor(task){
+			const color = this.parseHexColor(task.color);
+			return `rgb(${color[0]},${color[1]},${color[2]})`;
 		}
 	}
 }
@@ -70,7 +120,7 @@ export default {
 		margin-bottom: 10px;
 		overflow: hidden;
 		padding: 10px 10px;
-		border-radius: 5px;
+		border-radius: 10px;
 		box-shadow: 0px 0px 0px 1px rgba(0,0,0,.0);
 		transition: box-shadow .1s ease;
 	}
@@ -98,12 +148,16 @@ export default {
 		top: -10px;
 		user-select: none;
 	}
+
+	.day__main{
+    flex-grow: 1;
+    padding-left: 5px;
+    position: relative;
+	}
 	.day__lines-item{
 		border-top: 1px solid lightgray;
 	}
 	.day__lines-column{
-		flex-grow: 1;
-		padding-left: 5px;
 		position: relative;
 	}
 	.time__row:not(:last-child){
@@ -144,5 +198,29 @@ export default {
 		top: 0;
 		transform: translateY(-50%);
 		border-radius: 50%;
+	}
+
+	.day__task-wrapper{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		padding: 0 0 18px 5px;
+	}
+
+	.task{
+		box-sizing: border-box;
+		position: absolute;
+		width: 100%;
+		border-radius: 3px;
+		padding: 0 10px;
+		background-color: rgba(55,74,103, .8);
+		border: 1px solid rgb(55,74,103);
+	}
+
+	.task__time{
+		font-size: .6rem;
+		font-weight: bold;
 	}
 </style>
