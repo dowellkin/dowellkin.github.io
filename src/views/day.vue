@@ -49,7 +49,8 @@ export default {
 	data(){
 		return {
 			dayStart: 8,
-			dayEnd: 20
+			dayEnd: 20,
+			columnHeight: 30
 		}
 	},
 	computed:{
@@ -79,11 +80,9 @@ export default {
 			return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 		},
 		calculateBias(encodedTime){
-			console.log(encodedTime);
 			// const column = document.querySelectorAll(".day__lines-item")[1];
 			// const columnHeight = column.offsetHeight;
-			const columnHeight = 30;
-			const ret = this.remap(encodedTime, this.dayStart*60, this.dayEnd*60, 0, (this.dayEnd-this.dayStart)*columnHeight)
+			const ret = this.remap(encodedTime, this.dayStart*60, this.dayEnd*60, 0, (this.dayEnd-this.dayStart)*this.columnHeight)
 			return ret
 		},
 		getTopBias(task){
@@ -217,16 +216,19 @@ export default {
 	.task{
 		box-sizing: border-box;
 		position: absolute;
-		width: 100%;
+		width: 98%;
 		border-radius: 3px;
 		padding: 0 10px;
 		background-color: rgba(55,74,103, .8);
 		border: 1px solid rgb(55,74,103);
 		transition: transform .2s ease;
+		right: 0;
+		left: 50%;
+		transform: translateX(-50%);
 	}
 
 	.task:hover{
-		transform: scale(1.02);
+		transform: translateX(-50%) scale(1.02);
 	}
 
 	.task__time{
