@@ -5,14 +5,14 @@
       <a-menu theme="dark" :default-selected-keys="['1']" mode="inline">
         <a-menu-item key="1" @click="makeCurrent('Schedule')">
           <a-icon type="calendar" />
-          <span>Расписание</span>
+          <span>{{$t('Schedule')}}</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
       <a-layout-content style="margin: 0 16px">
         <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item>{{current}}</a-breadcrumb-item>
+          <a-breadcrumb-item>{{$t(current)}}</a-breadcrumb-item>
         </a-breadcrumb>
         <div :style="{ padding: '24px', background: '#fff', minHeight: '360px' }">
 					<router-view />
