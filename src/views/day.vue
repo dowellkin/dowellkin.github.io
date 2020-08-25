@@ -79,8 +79,10 @@ export default {
 			return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 		},
 		calculateBias(encodedTime){
-			const column = document.querySelectorAll(".day__lines-item")[1];
-			const columnHeight = column.offsetHeight;
+			console.log(encodedTime);
+			// const column = document.querySelectorAll(".day__lines-item")[1];
+			// const columnHeight = column.offsetHeight;
+			const columnHeight = 30;
 			const ret = this.remap(encodedTime, this.dayStart*60, this.dayEnd*60, 0, (this.dayEnd-this.dayStart)*columnHeight)
 			return ret
 		},
@@ -207,6 +209,9 @@ export default {
 		width: 100%;
 		height: 100%;
 		padding: 0 0 18px 5px;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden; 
 	}
 
 	.task{
@@ -217,6 +222,11 @@ export default {
 		padding: 0 10px;
 		background-color: rgba(55,74,103, .8);
 		border: 1px solid rgb(55,74,103);
+		transition: transform .2s ease;
+	}
+
+	.task:hover{
+		transform: scale(1.02);
 	}
 
 	.task__time{
