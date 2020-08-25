@@ -9,6 +9,7 @@ import 'ant-design-vue/dist/antd.css';
 
 import firebase from 'firebase/app'
 import 'firebase/database'
+import i18n from './i18n'
 
 Vue.use(Antd);
 
@@ -29,5 +30,6 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
+  i18n,
   render: h => h(App)
 }).$mount('#app')
