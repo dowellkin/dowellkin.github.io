@@ -1,7 +1,7 @@
 <template>
 	<div class="day">
 		<div class="day__title">
-			{{day.name}}
+			{{$t(day.name)}}
 		</div>
 		<div class="day__content">
 			<div class="day__time-column">
@@ -22,23 +22,31 @@
 					<div class="day__lines-item time__row" v-for="(time, index) in getLinesTime" :key="index"></div>
 				</div>
 				<div class="day__task-wrapper">
-					<div
-						v-for="(task, index) in day.tasks"
-						:key="index" class="day__task task"
-						:style="{
-							'top': `${getTopBias(task)}px`,
-							'height': `${getTaskHight(task)}px`,
-							'background-color': getBackgroundColor(task),
-							'border': `1px solid ${getBorderColor(task)}`
-						}">
-						<a-popover title="1 пара (45 мин.)">
-							<template slot="content">
-								{{task.title}}
-							</template>
-							<div class="tasl__content">
-								<span class="task__time">({{task.startTime}}-{{task.endTime}})</span> {{lessonTitle(task.title)}}
-							</div>
-						</a-popover>
+					<div class="day__tasks">
+						
+						<div
+							v-for="(task, index) in day.tasks"
+							:key="index" class="day__task task"
+							:style="{
+								'top': `${getTopBias(task)}px`,
+								'height': `${getTaskHight(task)}px`,
+								'background-color': getBackgroundColor(task),
+								'border': `1px solid ${getBorderColor(task)}`
+							}">
+							<a-popover :title="'пол пары (45 мин.)'">
+								<template slot="content">
+									<div>
+										{{task.title}} {{task.type != "none" ? ` (${task.type.toUpperCase()})` : ""}}
+									</div>
+									<div class="link link--open-lesson">
+										{{$t("More")}}
+									</div>
+								</template>
+								<div class="tasl__content">
+									<span class="task__time">({{task.startTime}}-{{task.endTime}})</span> {{lessonTitle(task.title)}}
+								</div>
+							</a-popover>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -78,7 +86,7 @@ export default {
 			const rules = [
 				index == this.getDay,
 				this.getHours >= this.dayStart,
-				this.getHours <= this.dayEnd
+				this.getHours < this.dayEnd
 			]
 			const result = rules.every(el=> el)
 			return result;
@@ -120,8 +128,7 @@ export default {
 		},
 		lessonTitle(title){
 			if(title.length > 22){
-				const elems = title.match(/\([А-Я]*\)/)[0];
-				return title.split(" ").map(el => el[0].toUpperCase()).join("") + elems;
+				return title.split(" ").map(el => el.length > 2 ? el[0].toUpperCase() : el[0]).join("");
 			}
 			return title
 		}
@@ -224,7 +231,7 @@ export default {
 		padding: 0 0 18px 5px;
 		white-space: nowrap;
 		text-overflow: ellipsis;
-		overflow: hidden; 
+		/* overflow: hidden;  */
 	}
 
 	.task{
@@ -248,5 +255,19 @@ export default {
 	.task__time{
 		font-size: .6rem;
 		font-weight: bold;
+	}
+
+	.day__tasks{
+		width: 100%;
+		height: 100%;
+		position: relative;
+	}
+
+	.link {
+		color: #1890ff;
+		cursor: pointer;
+	}
+	.link:hover{
+		text-decoration: underline;
 	}
 </style>

@@ -2,10 +2,14 @@
   <a-layout id="components-layout-demo-side" style="min-height: 100vh" :style="{'padding-left': '80px'}">
     <a-layout-sider v-model="collapsed" collapsible :style="{'position': 'fixed', 'height': '100%', 'left': 0, 'z-index': 2}">
       <div class="logo" />
-      <a-menu theme="dark" :default-selected-keys="['1']" mode="inline">
-        <a-menu-item key="1" @click="makeCurrent('Schedule')">
+      <a-menu theme="dark" :default-selected-keys="['Schedule']" mode="inline">
+        <a-menu-item key="Schedule" @click="makeCurrent('Schedule')">
           <a-icon type="calendar" />
           <span>{{$t('Schedule')}}</span>
+        </a-menu-item>
+        <a-menu-item key="Test" @click="makeCurrent('Test')">
+          <a-icon type="question" />
+          <span>TEST</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -38,6 +42,7 @@ export default {
 	methods: {
 		makeCurrent(page){
 			this.current = page;
+			this.$router.push({name: page});
 		}
 	},
 	created(){

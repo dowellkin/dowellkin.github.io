@@ -4,7 +4,7 @@ export default {
 			ctx.commit("newDate", new Date());
 			setTimeout(() => {
 				ctx.dispatch("updateTime")
-			}, 3000)
+			}, 1000000)
 		}
 	},
 
