@@ -1,15 +1,21 @@
 <template>
-  <a-layout id="components-layout-demo-side" style="min-height: 100vh" :style="{'padding-left': '80px'}">
+  <a-layout id="components-layout" style="min-height: 100vh" :style="{'padding-left': '80px'}">
     <a-layout-sider v-model="collapsed" collapsible :style="{'position': 'fixed', 'height': '100%', 'left': 0, 'z-index': 2}">
-      <div class="logo" />
+      <div class="logo">
+				{{getWeekNum}}
+			</div>
       <a-menu theme="dark" :default-selected-keys="['Schedule']" mode="inline">
         <a-menu-item key="Schedule" @click="makeCurrent('Schedule')">
-          <a-icon type="calendar" />
-          <span>{{$t('Schedule')}}</span>
+					<router-link to="/">
+						<a-icon type="calendar" />
+						<span>{{$t('Schedule')}}</span>
+					</router-link>
         </a-menu-item>
         <a-menu-item key="Test" @click="makeCurrent('Test')">
-          <a-icon type="question" />
-          <span>TEST</span>
+					<router-link to="test">
+						<a-icon type="question" />
+						<span>TEST</span>
+					</router-link>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -30,6 +36,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 
 export default {
 	name: 'app',
@@ -41,22 +48,33 @@ export default {
 	},
 	methods: {
 		makeCurrent(page){
-			this.current = page;
 			this.$router.push({name: page});
+			this.current = page;
 		}
 	},
 	created(){
-		this.$store.dispatch("loadSchedule");
+		console.log(this.$router.currentRoute.name);
+		console.log(this.$router.currentRoute);
+		this.current = this.$router.currentRoute.name;
+		this.$store.dispatch("loadAll");
 		this.$store.dispatch("updateTime")
+	},
+	computed: {
+		...mapGetters(['getWeekNum'])
 	}
 }
 </script>
 
 <style>
 
-#components-layout-demo-side .logo {
+#components-layout .logo {
   height: 32px;
   background: rgba(255, 255, 255, 0.2);
   margin: 16px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #fff;
+	font-size: 1.4rem;
 }
 </style>

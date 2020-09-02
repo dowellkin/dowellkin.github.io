@@ -37,6 +37,19 @@ export default {
 		},
 		getEncodedTime(state, getters) {
 			return (parseInt(getters.getHours, 10) * 60) + parseInt(getters.getMinutes, 10)
+		},
+		getWeekNum(){
+			let thisYear = new Date().getFullYear();
+			let firstDay = new Date(0);
+			firstDay.setFullYear(thisYear);
+			const day = 8.64e7;
+			const weekMil = 6.048e8;
+
+			firstDay = firstDay.getTime() - day * firstDay.getDay();
+			let now = new Date().getTime();
+
+			let week = Math.floor((now - firstDay) / weekMil);
+			return week % 4 - 2;
 		}
 	}
 }
