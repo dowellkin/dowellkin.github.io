@@ -49,7 +49,7 @@ export default {
 			let now = new Date().getTime();
 
 			let week = Math.floor((now - firstDay) / weekMil);
-			return week % 4 - 2;
+			return (week - 2) % 4 ;
 		}
 	}
 }
