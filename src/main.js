@@ -7,8 +7,10 @@ import store from './store'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 
+// import firebase from 'firebase'
 import firebase from 'firebase/app'
 import 'firebase/database'
+import 'firebase/auth'
 import i18n from './i18n'
 
 Vue.use(Antd);
@@ -24,6 +26,9 @@ firebase.initializeApp({
 	measurementId: "G-7BQXZ95QYH"
 });
 
+firebase.auth().onAuthStateChanged(user => {
+	store.dispatch("fetchUser", user);
+});
 
 Vue.config.productionTip = false
 

@@ -1,5 +1,5 @@
 <template>
-	<div class="day">
+	<div class="day" :class="{ current: getDay==index }">
 		<div class="day__title">
 			{{$t(day.name)}}
 		</div>
@@ -41,9 +41,9 @@
 									<div class="popup__teacher">
 										{{(task.teacherId >= 0) ? getTeacher(task.teacherId).name : task.teacher}}
 									</div>
-									<div class="link link--open-lesson">
+									<!-- <div class="link link--open-lesson">
 										{{$t("More")}}
-									</div>
+									</div> -->
 								</template>
 								<div class="tasl__content">
 									<span class="task__time">({{task.startTime}}-{{task.endTime}})</span> {{lessonTitle(task.title)}}
@@ -138,6 +138,12 @@ export default {
 			}
 			return title
 		}
+	},
+	mounted(){
+		if(this.index == this.getDay && document.body.clientWidth <= 770){
+			console.log(this.$el);
+			this.$el.scrollIntoView({block: "center"});
+		}
 	}
 }
 </script>
@@ -152,6 +158,9 @@ export default {
 		box-shadow: 0px 0px 0px 1px rgba(0,0,0,.0);
 		transition: box-shadow .1s ease;
 	}
+	.day.current{
+		box-shadow: 0px 0px 0px 1px rgba(0,0,0,.05);
+	}
 	.day:hover{
 		box-shadow: 0px 0px 0px 1px rgba(0,0,0,.2);
 	}
@@ -160,6 +169,10 @@ export default {
 		text-align: center;
 		font-weight: bold;
 		font-size: 1rem;
+	}
+	.current .day__title::before,
+	.current .day__title::after{
+		content: "~";
 	}
 	.day__content{
 		padding-top: 10px;
