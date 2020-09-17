@@ -1,20 +1,51 @@
 <template>
-  <a-layout id="components-layout" style="min-height: 100vh" :style="{'padding-left': '80px'}">
+  <a-layout id="components-layout" style="min-height: 100vh" :style="{'padding-left': '80px'}" ref="root">
     <a-layout-sider v-model="collapsed" collapsible :style="{'position': 'fixed', 'height': '100%', 'left': 0, 'z-index': 2}">
       <div class="logo">
-				{{getWeekNum}}
+
+				<a-popover v-model="visiblePopup" :title="$t('Week choise')" placement="bottomLeft" trigger="focus">
+					<div slot="content" @click="weekChoise" style="display: flex; justify-content: space-around; align-items: center">
+						<p
+							v-for="week in weeks"
+							:key="week"
+							class="weekChoice"
+							:class="{ current:getWeekNum==week, chosen:getWeek==week }"
+							@click="makeWeek(week)"
+						>
+							{{week}}
+						</p>
+					</div>
+					<div @click="weekChoise" :class="{ maxwidth:collapsed, fullsize: !collapsed }">
+						<template v-if="collapsed">
+							{{getWeek}}
+						</template>
+						
+						<p
+							v-else
+							v-for="week in weeks"
+							:key="week"
+							class="weekChoice uncollapsed"
+							:class="{ current:getWeekNum==week, chosen:getWeek==week }"
+							@click="makeWeek(week, inner)"
+						>
+							{{week}}
+						</p>
+
+					</div>
+				</a-popover>
+				
 			</div>
-      <a-menu theme="dark" :default-selected-keys="['Schedule']" mode="inline">
+      <a-menu theme="dark" v-model="current" :default-selected-keys="['Schedule']" mode="inline">
         <a-menu-item key="Schedule" @click="makeCurrent('Schedule')">
 					<router-link to="/">
 						<a-icon type="calendar" />
 						<span>{{$t('Schedule')}}</span>
 					</router-link>
         </a-menu-item>
-        <a-menu-item key="Test" @click="makeCurrent('Test')">
-					<router-link to="test">
-						<a-icon type="question" />
-						<span>TEST</span>
+        <a-menu-item key="Auth" @click="makeCurrent('Auth')">
+					<router-link to="auth">
+						<a-icon type="user" />
+						<span>Authentication</span>
 					</router-link>
         </a-menu-item>
       </a-menu>
@@ -43,25 +74,49 @@ export default {
 	data(){
 		return {
 			collapsed: true,
-			current: "Schedule"
+			visible: false,
+			current: ["Schedule"],
+			weeks: [1,2,3,4]
 		}
 	},
 	methods: {
 		makeCurrent(page){
-			this.$router.push({name: page});
-			this.current = page;
+			page
+			// this.$router.push({name: page});
+			// this.current = page;
+		},
+		weekChoise(){
+			this.visible = !this.visible;
+		},
+		makeWeek(week, inner = false){
+			this.$store.commit('saveWeek', week);
+			if(inner){
+				this.visible = false;
+			}
 		}
 	},
 	created(){
-		console.log(this.$router.currentRoute.name);
-		console.log(this.$router.currentRoute);
-		this.current = this.$router.currentRoute.name;
+		this.$router.onReady(() => {
+			console.log(this.$router.currentRoute.name);
+			console.log(this.$router.currentRoute);
+			this.current[0] = this.$router.currentRoute.name;
+    });
+		// this.current = this.$router.currentRoute.name;
 		this.$store.dispatch("loadAll");
 		this.$store.dispatch("updateTime")
+		this.$router.beforeEach((to, from, next) => {
+			console.log('redirect');
+			console.log({to,from,next});
+			this.current[0] = to.name;
+			next();
+		})
 	},
 	computed: {
-		...mapGetters(['getWeekNum'])
-	}
+		...mapGetters(['getWeekNum', 'getWeek']),
+		visiblePopup(){
+			return this.collapsed && this.visible;
+		}
+	},
 }
 </script>
 
@@ -76,5 +131,57 @@ export default {
 	align-items: center;
 	color: #fff;
 	font-size: 1.4rem;
+	cursor: pointer;
+}
+
+.maxwidth{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.fullsize{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+
+}
+
+.weekChoice{
+	position: relative;
+	margin: 0;
+	padding: 0;
+	font-size: 1.2rem;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	line-height: 30px;
+	cursor: pointer;
+	border-radius: 50%;
+	user-select: none;
+	transition: background-color .2s ease;
+}
+.weekChoice.current:before{
+	content: '';
+	width: 100%;
+	height: 1px;
+	position: absolute;
+	background: rgba(0, 0, 0, 0.65);
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+.weekChoice.uncollapsed.current:before{
+	background: rgba(255, 255, 255, 0.65);
+}
+.weekChoice.chosen{
+	font-size: 1.25rem;
+	background: rgba(0,0,0,.15);
+	color: #000;
+}
+.weekChoice.uncollapsed.chosen{
+	color: #fff;
 }
 </style>

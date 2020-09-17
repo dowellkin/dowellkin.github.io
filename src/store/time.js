@@ -9,12 +9,16 @@ export default {
 	},
 
 	state: {
-		date: new Date()
+		date: new Date(),
+		savedWeek: 0
 	},
 
 	mutations: {
 		newDate(state, value){
 			state.date = value
+		},
+		saveWeek(state, value){
+			state.savedWeek = value
 		}
 	},
 
@@ -38,6 +42,9 @@ export default {
 		getEncodedTime(state, getters) {
 			return (parseInt(getters.getHours, 10) * 60) + parseInt(getters.getMinutes, 10)
 		},
+		getSavedWeek(state){
+			return state.savedWeek;
+		},
 		getWeekNum(){
 			let thisYear = new Date().getFullYear();
 			let firstDay = new Date(0);
@@ -50,6 +57,9 @@ export default {
 
 			let week = Math.floor((now - firstDay) / weekMil);
 			return (week - 2) % 4 ;
+		},
+		getWeek(state, getters) {
+			return getters.getSavedWeek || getters.getWeekNum;
 		}
 	}
 }
