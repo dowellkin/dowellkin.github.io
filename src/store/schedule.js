@@ -19,6 +19,7 @@ export default {
 			ctx.commit('saveDays', ans.val().days);
 			ctx.commit('saveLessons', ans.val().lessons);
 			ctx.commit('saveRings', ans.val().rings);
+			ctx.commit('saveTeachers', ans.val().teachers);
 		},
 		async loadAll(ctx, group="it042"){
 			await ctx.dispatch("loadSchedule", group);
@@ -34,6 +35,7 @@ export default {
 		days: [],
 		lessons: [],
 		rings: [],
+		teachers: [],
 		isLoading: false
 	},
 
@@ -49,6 +51,10 @@ export default {
 		},
 		saveDays(state, data) {
 			state.days = data
+			// console.log('days loaded:', data)
+		},
+		saveTeachers(state, data) {
+			state.teachers = data
 			// console.log('days loaded:', data)
 		},
 		saveLessons(state, data) {
@@ -86,6 +92,12 @@ export default {
 		},
 		isLoading(state){
 			return state.isLoading
+		},
+		getTeacher: state => id => {
+			if(id < 0){
+				return undefined;
+			}
+			return state.teachers[id];
 		}
 	}
 }

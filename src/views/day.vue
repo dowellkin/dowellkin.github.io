@@ -38,6 +38,9 @@
 									<div>
 										{{task.title}} {{task.type != "none" ? ` (${task.type.toUpperCase()})` : ""}}
 									</div>
+									<div class="popup__teacher">
+										{{(task.teacherId >= 0) ? getTeacher(task.teacherId).name : task.teacher}}
+									</div>
 									<div class="link link--open-lesson">
 										{{$t("More")}}
 									</div>
@@ -90,6 +93,9 @@ export default {
 			]
 			const result = rules.every(el=> el)
 			return result;
+		},
+		getTeacher(id){
+			return this.$store.getters['getTeacher'](id)
 		},
 		remap(value, low1, high1, low2, high2){
 			return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
