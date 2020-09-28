@@ -97,16 +97,16 @@ export default {
 	},
 	created(){
 		this.$router.onReady(() => {
-			console.log(this.$router.currentRoute.name);
-			console.log(this.$router.currentRoute);
+			// console.log(this.$router.currentRoute.name);
+			// console.log(this.$router.currentRoute);
 			this.current[0] = this.$router.currentRoute.name;
     });
 		// this.current = this.$router.currentRoute.name;
 		this.$store.dispatch("loadAll");
 		this.$store.dispatch("updateTime")
 		this.$router.beforeEach((to, from, next) => {
-			console.log('redirect');
-			console.log({to,from,next});
+			// console.log('redirect');
+			// console.log({to,from,next});
 			this.current[0] = to.name;
 			next();
 		})

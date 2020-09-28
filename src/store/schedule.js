@@ -6,14 +6,12 @@ export default {
 			ctx.commit('makeIsLoading', true);
 			const ans = await db.ref('/schedule').once("value")
 			// console.log(ans.val());
-			console.log(ans.val());
 			ctx.commit('saveSchedule', ans.val()[group]);
 		},
 		async loadOptions(ctx) {
 			const db = firebase.database()
 			ctx.commit('makeIsLoading', true);
 			const ans = await db.ref('/options').once("value")
-			console.log(ans.val());
 			// console.log(ans.val());
 			ctx.commit('saveColors', ans.val().colors);
 			ctx.commit('saveDays', ans.val().days);
@@ -42,7 +40,7 @@ export default {
 	mutations: {
 		saveSchedule(state, data) {
 			state.mainSchedule = data
-			console.log('data loaded:', data)
+			// console.log('data loaded:', data)
 		},
 		saveColors(state, data) {
 			data.none = "#6ab04c"
@@ -78,11 +76,10 @@ export default {
 				const d = schedule[day];
 				const dayArr = [];
 				if (d == undefined) schedule[day] = [];
-				for(let task = 0; task < d.length; task++){
-					const t = d[task];
-					if (t == undefined) schedule[day][task] = [];
-					for(let curTask = 0; curTask < t.length; curTask++ ){
-						const ct = t[curTask];
+				for (let task = 0; task < schedule[day].length; task++) {
+					if (schedule[day][task] == undefined) schedule[day][task] = [];
+					for (let curTask = 0; curTask < schedule[day][task].length; curTask++) {
+						const ct = schedule[day][task][curTask];
 						const pair = ct;
 						if (ct.custom || !ct.weeks.includes(getters.getWeek)) {
 							continue;

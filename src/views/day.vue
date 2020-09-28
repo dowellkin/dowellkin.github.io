@@ -23,7 +23,7 @@
 				</div>
 				<div class="day__task-wrapper">
 					<div class="day__tasks">
-						
+						<transition-group name="swing">
 						<div
 							v-for="(task, index) in day"
 							:key="index" class="day__task task"
@@ -49,10 +49,11 @@
 									</div> -->
 								</template>
 								<div class="tasl__content">
-									<span class="task__time">({{task.startTime}}-{{task.endTime}})</span> {{lessonTitle(task.name)}}
+									<span class="task__time">({{task.startTime}}-{{task.endTime}})</span> {{lessonTitle(task.name)}} <span class="group" v-if="task.group">{{task.group == 3 ? "1, 2" : task.group}}г.</span>
 								</div>
 							</a-popover>
 						</div>
+						</transition-group>
 					</div>
 				</div>
 			</div>
@@ -143,9 +144,9 @@ export default {
 		}
 	},
 	mounted(){
-		console.log(this.day);
+		// console.log(this.day);
 		if(this.index == this.getDay && document.body.clientWidth <= 770){
-			console.log(this.$el);
+			// console.log(this.$el);
 			this.$el.scrollIntoView({block: "center"});
 		}
 	}
@@ -292,5 +293,12 @@ export default {
 	}
 	.link:hover{
 		text-decoration: underline;
+	}
+	/* shitty animations */
+	.swing-enter-active, .swing-leave-active {
+		transition: opacity .2s ease, top .2s ease, left .2s ease;
+	}
+	.swing-enter, .swing-leave-to {
+		opacity: 0;
 	}
 </style>
