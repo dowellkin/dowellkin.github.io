@@ -42,7 +42,7 @@ export default {
 	mutations: {
 		saveSchedule(state, data) {
 			state.mainSchedule = data
-			// console.log('data loaded:', data)
+			console.log('data loaded:', data)
 		},
 		saveColors(state, data) {
 			data.none = "#6ab04c"
@@ -71,24 +71,41 @@ export default {
 	},
 	
 	getters: {
-		fullScheldue(state){
+		fullScheldue(state, getters){
 			const schedule = state.mainSchedule;
+			const sch = [];
 			for(let day = 0; day < schedule.length; day++){
-				const d = schedule[day].tasks;
+				const d = schedule[day];
+				const dayArr = [];
+				if (d == undefined) schedule[day] = [];
 				for(let task = 0; task < d.length; task++){
 					const t = d[task];
-					if(t.custom){
-						continue;
-					} else {
-						t.color = state.colors[t.type];
-						t.startTime = state.rings[t.lessonNumber][t.half][0];
-						t.endTime = state.rings[t.lessonNumber][t.half][1];
-						t.title = state.lessons[t.lessonId];
+					if (t == undefined) schedule[day][task] = [];
+					for(let curTask = 0; curTask < t.length; curTask++ ){
+						const ct = t[curTask];
+						const pair = ct;
+						if (ct.custom || !ct.weeks.includes(getters.getWeek)) {
+							continue;
+						} else {
+							pair.color = state.colors[pair.type] || state.colors["лк"];
+							pair.startTime = state.rings[pair.lessonNumber][0][0];
+							pair.endTime = state.rings[pair.lessonNumber][0][1];
+							if (pair.lessonId >= 0)
+								pair.title = state.lessons[pair.lessonId];
+							if (pair.teacherId >= 0)
+								pair.teacher = state.teachers[pair.teacherId];
+							dayArr.push(pair);
+							let anotherPair = JSON.parse(JSON.stringify(pair));
+							pair.startTime = state.rings[pair.lessonNumber][1][0];
+							pair.endTime = state.rings[pair.lessonNumber][1][1];
+							dayArr.push(anotherPair);
+						}
 					}
 				}
+				sch.push(dayArr);
 			}
-			// console.log("~~~", schedule);
-			return schedule
+			console.log("~~~", sch);
+			return sch
 		},
 		isLoading(state){
 			return state.isLoading
@@ -98,6 +115,9 @@ export default {
 				return undefined;
 			}
 			return state.teachers[id];
+		},
+		getDays(state){
+			return state.days;
 		}
 	}
 }

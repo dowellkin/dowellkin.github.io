@@ -4,7 +4,7 @@ export default {
 			ctx.commit("newDate", new Date());
 			setTimeout(() => {
 				ctx.dispatch("updateTime")
-			}, 20000)
+			}, 200000) // починить
 		}
 	},
 
@@ -56,7 +56,8 @@ export default {
 			let now = new Date().getTime();
 
 			let week = Math.floor((now - firstDay) / weekMil);
-			return (week - 2) % 4 ;
+			let ret = (week - 2) % 4;
+			return  ret == 0? 4 : ret;
 		},
 		getWeek(state, getters) {
 			return getters.getSavedWeek || getters.getWeekNum;

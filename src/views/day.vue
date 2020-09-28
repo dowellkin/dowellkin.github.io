@@ -1,7 +1,7 @@
 <template>
 	<div class="day" :class="{ current: getDay==index }">
 		<div class="day__title">
-			{{$t(day.name)}}
+			{{$t(getDays[index])}}
 		</div>
 		<div class="day__content">
 			<div class="day__time-column">
@@ -25,7 +25,7 @@
 					<div class="day__tasks">
 						
 						<div
-							v-for="(task, index) in day.tasks"
+							v-for="(task, index) in day"
 							:key="index" class="day__task task"
 							:style="{
 								'top': `${getTopBias(task)}px`,
@@ -36,17 +36,20 @@
 							<a-popover :title="'пол пары (45 мин.)'">
 								<template slot="content">
 									<div>
-										{{task.title}} {{task.type != "none" ? ` (${task.type.toUpperCase()})` : ""}}
+										{{task.name}} {{task.type != "none" ? ` (${task.type.toUpperCase()})` : ""}}
 									</div>
 									<div class="popup__teacher">
-										{{(task.teacherId >= 0) ? getTeacher(task.teacherId).name : task.teacher}}
+										{{task.teacher.name}}
+									</div>
+									<div class="popup__room">
+										{{task.room}}
 									</div>
 									<!-- <div class="link link--open-lesson">
 										{{$t("More")}}
 									</div> -->
 								</template>
 								<div class="tasl__content">
-									<span class="task__time">({{task.startTime}}-{{task.endTime}})</span> {{lessonTitle(task.title)}}
+									<span class="task__time">({{task.startTime}}-{{task.endTime}})</span> {{lessonTitle(task.name)}}
 								</div>
 							</a-popover>
 						</div>
@@ -82,7 +85,7 @@ export default {
 		getBias(){
 			return this.calculateBias(this.getEncodedTime)
 		},
-		...mapGetters(["getTime", "getDay", "getEncodedTime", "getHours"])
+		...mapGetters(["getTime", "getDay", "getEncodedTime", "getHours", "getDays"])
 	},
 	methods: {
 		isNeedToShowMark(index){
@@ -140,6 +143,7 @@ export default {
 		}
 	},
 	mounted(){
+		console.log(this.day);
 		if(this.index == this.getDay && document.body.clientWidth <= 770){
 			console.log(this.$el);
 			this.$el.scrollIntoView({block: "center"});
@@ -195,7 +199,7 @@ export default {
     padding-left: 5px;
     position: relative;
 	}
-	.day__lines-item{
+	.day__lines-item:not(:first-child){
 		border-top: 1px solid lightgray;
 	}
 	.day__lines-column{

@@ -161,20 +161,23 @@ export default {
 	cursor: pointer;
 	border-radius: 50%;
 	user-select: none;
-	transition: background-color .2s ease;
+	transition: background-color .4s ease;
+}
+.weekChoice.current{
+	background-color:#188fff38;
 }
 .weekChoice.current:before{
 	content: '';
 	width: 100%;
 	height: 1px;
 	position: absolute;
-	background: rgba(0, 0, 0, 0.65);
+	background: rgba(0, 0, 0, 0.1);
 	bottom: 0;
 	left: 0;
 	right: 0;
 }
 .weekChoice.uncollapsed.current:before{
-	background: rgba(255, 255, 255, 0.65);
+	background: rgba(255, 255, 255, 0.1);
 }
 .weekChoice.chosen{
 	font-size: 1.25rem;
