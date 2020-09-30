@@ -45,7 +45,7 @@
         <a-menu-item key="Auth" @click="makeCurrent('Auth')">
 					<router-link to="auth">
 						<a-icon type="user" />
-						<span>Authentication</span>
+						<span>{{$t('Auth')}}</span>
 					</router-link>
         </a-menu-item>
       </a-menu>
