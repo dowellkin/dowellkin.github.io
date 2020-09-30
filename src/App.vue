@@ -36,14 +36,20 @@
 				
 			</div>
       <a-menu theme="dark" v-model="current" :default-selected-keys="['Schedule']" mode="inline">
-        <a-menu-item key="Schedule" @click="makeCurrent('Schedule')">
+        <a-menu-item key="Schedule">
 					<router-link to="/">
 						<a-icon type="calendar" />
 						<span>{{$t('Schedule')}}</span>
 					</router-link>
         </a-menu-item>
-        <a-menu-item key="Auth" @click="makeCurrent('Auth')">
-					<router-link to="auth">
+        <a-menu-item key="Teachers">
+					<router-link to="/teachers">
+						<a-icon type="team" />
+						<span>{{$t('Teachers')}}</span>
+					</router-link>
+        </a-menu-item>
+        <a-menu-item key="Auth">
+					<router-link to="/auth">
 						<a-icon type="user" />
 						<span>{{$t('Auth')}}</span>
 					</router-link>
@@ -53,7 +59,7 @@
     <a-layout>
       <a-layout-content style="margin: 0 16px">
         <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item>{{$t(current)}}</a-breadcrumb-item>
+          <a-breadcrumb-item>{{$t(current[0])}}</a-breadcrumb-item>
         </a-breadcrumb>
         <div :style="{ padding: '24px', background: '#fff', minHeight: '360px' }">
 					<router-view />
@@ -80,11 +86,6 @@ export default {
 		}
 	},
 	methods: {
-		makeCurrent(page){
-			page
-			// this.$router.push({name: page});
-			// this.current = page;
-		},
 		weekChoise(){
 			this.visible = !this.visible;
 		},
@@ -97,16 +98,11 @@ export default {
 	},
 	created(){
 		this.$router.onReady(() => {
-			// console.log(this.$router.currentRoute.name);
-			// console.log(this.$router.currentRoute);
 			this.current[0] = this.$router.currentRoute.name;
     });
-		// this.current = this.$router.currentRoute.name;
 		this.$store.dispatch("loadAll");
 		this.$store.dispatch("updateTime")
 		this.$router.beforeEach((to, from, next) => {
-			// console.log('redirect');
-			// console.log({to,from,next});
 			this.current[0] = to.name;
 			next();
 		})

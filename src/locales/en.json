@@ -10,6 +10,21 @@
 
 	"More": "More",
 
+	"Teachers": "Teachers",
+
+	"Add teacher": "Add teacher",
+	"Сhange": "Сhange",
+	"Look": "Look",
+	"Action": "Action",
+
+	"Id": "Id",
+	"Name": "Name",
+	"Link": "Link",
+
 	"Week choise": "Week choise",
-	"Auth": "Authentication"
+	"Auth": "Authentication",
+
+	"Name must be longer than 5 letters": "Name must be longer than 5 letters",
+
+	"Cancel": "Cancel"
 }

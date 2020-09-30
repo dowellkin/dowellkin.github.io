@@ -28,6 +28,17 @@ firebase.initializeApp({
 
 firebase.auth().onAuthStateChanged(user => {
 	store.dispatch("fetchUser", user);
+	const savedUser = store.getters.user.data;
+	if(savedUser != null){
+		firebase.database().ref('permissions/' + savedUser.uid).once("value")
+		.then(snap=>{
+			if (snap.val() != undefined) {
+				store.commit("SET_PERMISSIONS", snap.val());
+			} else {
+				firebase.database().ref('permissions/' + savedUser.uid).set("user")
+			}
+		});
+	}
 });
 
 Vue.config.productionTip = false

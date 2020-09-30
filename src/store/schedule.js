@@ -4,20 +4,30 @@ export default {
 		async loadSchedule(ctx, group = "it042") {
 			const db = firebase.database()
 			ctx.commit('makeIsLoading', true);
-			const ans = await db.ref('/schedule').once("value")
-			// console.log(ans.val());
+			const ref = db.ref('/schedule')
+			const ans = await ref.once("value")
+			ref.on('value', (snapshot) => {
+				ctx.commit('saveSchedule', snapshot.val()[group]);
+			})
 			ctx.commit('saveSchedule', ans.val()[group]);
 		},
 		async loadOptions(ctx) {
+			function pushData(data){
+				ctx.commit('saveColors', data.colors);
+				ctx.commit('saveDays', data.days);
+				ctx.commit('saveLessons', data.lessons);
+				ctx.commit('saveRings', data.rings);
+				ctx.commit('saveTeachers', data.teachers);
+			}
 			const db = firebase.database()
 			ctx.commit('makeIsLoading', true);
-			const ans = await db.ref('/options').once("value")
+			const ref = db.ref('/options');
+			const ans = await ref.once("value");
+			ref.on('value', (snapshot) => {
+				pushData(snapshot.val());
+			})
 			// console.log(ans.val());
-			ctx.commit('saveColors', ans.val().colors);
-			ctx.commit('saveDays', ans.val().days);
-			ctx.commit('saveLessons', ans.val().lessons);
-			ctx.commit('saveRings', ans.val().rings);
-			ctx.commit('saveTeachers', ans.val().teachers);
+			pushData(ans.val());
 		},
 		async loadAll(ctx, group="it042"){
 			await ctx.dispatch("loadSchedule", group);
@@ -115,6 +125,9 @@ export default {
 		},
 		getDays(state){
 			return state.days;
+		},
+		getTeachers(state) {
+			return state.teachers;
 		}
 	}
 }

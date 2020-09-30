@@ -1,0 +1,177 @@
+<template>
+	<div class="teachers">
+		<a-modal
+      :title="$t(modal.title)"
+      :visible="modal.visible"
+      :confirm-loading="modal.confirmLoading"
+			:cancelText="$t('Cancel')"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    >
+			<a-form :form="form" layout="vertical">
+				<a-form-item
+					:label="this.$t('Name')"
+					:validate-status="modal.nameStatus"
+					:help="modal.help">
+					<a-input
+						v-decorator="['note', { rules: [{ required: true, message: 'Please input your note!' }] }]"
+						v-model="modal.name" :disabled="user.permissions != 'admin'"
+					/>
+				</a-form-item>
+				<a-form-item :label="this.$t('Link')">
+					<a-input
+						v-decorator="['note', { rules: [{ required: true, message: 'Please input your note!' }] }]"
+						v-model="modal.link" type="url" :disabled="user.permissions != 'admin'"
+					/>
+				</a-form-item>
+			</a-form>
+		</a-modal>
+		<div v-if="user.permissions == 'admin'" class="teachers__actions" style="margin-bottom: 15px">
+			<a-button type="primary" icon="plus" @click='showModal("Add teacher")'>{{$t('Add teacher')}}</a-button>
+		</div>
+		<a-table
+			:columns="columns"
+			:data-source="getTeachers"
+			:pagination="{ pageSize: 20 }"
+			tableLayout='auto'
+			:rowKey="getRowKey"
+			:loading="isLoading"
+		>
+			<a slot="name" slot-scope="text">{{ text }}</a>
+			<span slot="id" slot-scope="id">{{ id+1 }}</span>
+			<span slot="link" slot-scope="link">
+				<a v-if="link.length > 0" :href="link" target="_blank">
+					<a-button size="small" type="link">
+						Страница на сайте академии
+					</a-button>
+				</a>
+				<a-button v-else size="small" type="link">
+					Страница не найдена
+				</a-button>
+			</span>
+			<span slot="action" slot-scope="text, record">
+				<a-button v-if="user.permissions == 'admin'" type="primary" size="small" icon="tool"  @click='showModal("Сhange", record.id)'>
+					{{$t('Сhange')}}
+				</a-button>
+				<a-button v-else type="primary" size="small" icon="tool"  @click='showModal("Сhange", record.id)'>
+					{{$t('Look')}}
+				</a-button>
+			</span>
+		</a-table>
+	</div>
+</template>
+
+<script>
+import {mapGetters} from 'vuex'
+import firebase from 'firebase/app'
+export default {
+	name: "TeachersPage",
+	data() {
+		return {
+			columns: [
+				{
+					title: this.$t('Id'),
+					dataIndex: 'id',
+					key: 'id',
+					width: 60,
+					scopedSlots: { customRender: 'id' },
+				},
+				{
+					title: this.$t('Name'),
+					dataIndex: 'name',
+					key: 'name',
+				},
+				{
+					title: this.$t('Link'),
+					dataIndex: 'link',
+					key: 'link',
+					scopedSlots: { customRender: 'link' },
+				},
+				{
+					title: this.$t('Action'),
+					dataIndex: 'action',
+					key: 'action',
+					scopedSlots: { customRender: 'action' },
+				}
+			],
+			modal: {
+				title: "",
+				visible: false,
+				confirmLoading: false,
+				id: -1,
+				name: "",
+				link: "",
+				form: this.$form.createForm(this, { name: 'coordinated' }),
+				nameStatus: "",
+				help: "",
+			}
+		}
+	},
+	computed: {
+		...mapGetters(['getTeachers', 'isLoading', 'user'])
+	},
+	methods: {
+		getRowKey(text, index){
+			return index;
+		},
+    showModal(from, id = -1) {
+			this.modal.id = id;
+			if(id >= 0){
+				const teacher = this.$store.getters['getTeacher'](id);
+				this.modal.name = teacher.name;
+				this.modal.link = teacher.link;
+			} else {
+				this.modal.name = "";
+				this.modal.link = "";
+			}
+			this.modal.title = from;
+      this.modal.visible = true;
+    },
+    handleOk() {
+			if(this.user.permissions != 'admin'){
+				this.modal.visible = false;
+				return;
+			}
+			if(this.modal.name.length < 6){
+				this.modal.nameStatus = "error";
+				this.modal.help = this.$t("Name must be longer than 5 letters");
+				return;
+			} else {
+				this.modal.nameStatus = "";
+				this.modal.help = "";
+			}
+			this.modal.confirmLoading = true;
+			let teacherid = NaN
+			if(this.modal.id > -1){
+				teacherid = this.modal.id;
+			} else {
+				teacherid = Math.max(...this.getTeachers.map(el => el.id))+1;
+			}
+			firebase.database().ref('options/teachers/').update({
+				[teacherid]: {
+					"id": teacherid,
+					"name": this.modal.name,
+					"link": this.modal.link
+					}
+				}, (error) => {
+					if(error) {
+						this.modal.confirmLoading = false;
+						this.$message.error("Что-то пошло не так");
+						console.error(error);
+					} else {
+						this.modal.confirmLoading = false;
+						this.modal.visible = false;
+						this.$message.success("Преподаватель успешно обновлен");
+					}
+				});
+    },
+    handleCancel() {
+      this.modal.visible = false;
+    },
+	}
+}
+</script>
+
+<style>
+
+</style>

@@ -1,5 +1,5 @@
 <template>
-	<div class="about">
+	<div class="auth">
 		<div v-if="!this.user.loggedIn" class="notAuth">
 			<h1>Test page</h1>
 			<a-button type="primary" @click="auth">
@@ -21,14 +21,14 @@ import 'firebase/auth'
 
 import {mapGetters} from 'vuex'
 export default {
-	name: "Auth",
+	name: "AuthPage",
 	methods: {
 		auth(){
 			const provider = new firebase.auth.GoogleAuthProvider();
 			firebase.auth().languageCode = 'ru';
 			firebase.auth().signInWithPopup(provider)
-			.then(result => {
-				console.log("result: ", result);
+			.then(() => {
+				// console.log("result: ", result);
 				this.$message.success("Вы успешно вошли в аккаунт")
 			})
 			.catch( err => {

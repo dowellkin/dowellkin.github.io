@@ -15,7 +15,7 @@ import loading from '../components/loading'
 import {mapGetters} from "vuex"
 
 export default {
-	name: "schedule",
+	name: "SchedulePage",
 	components: {
 		day,
 		loading

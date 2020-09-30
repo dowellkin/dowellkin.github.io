@@ -2,12 +2,16 @@ export default {
 	state: {
 			user: {
 				loggedIn: false,
-				data: null
+				data: null,
+				permissions: null
 			}
 		},
 		getters: {
 			user(state) {
 				return state.user
+			},
+			permissions(state){
+				return state.permissions
 			}
 		},
 		mutations: {
@@ -16,6 +20,9 @@ export default {
 			},
 			SET_USER(state, data) {
 				state.user.data = data;
+			},
+			SET_PERMISSIONS(state, data) {
+				state.user.permissions = data;
 			}
 		},
 		actions: {
@@ -26,7 +33,9 @@ export default {
 				if (user) {
 					commit("SET_USER", {
 						displayName: user.displayName,
-						email: user.email
+						email: user.email,
+						photoURL: user.photoURL,
+						uid: user.uid,
 					});
 				} else {
 					commit("SET_USER", null);
