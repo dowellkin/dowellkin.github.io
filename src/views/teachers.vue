@@ -8,7 +8,7 @@
       @ok="handleOk"
       @cancel="handleCancel"
     >
-			<a-form :form="form" layout="vertical">
+			<a-form :form="modal.formVariable" layout="vertical">
 				<a-form-item
 					:label="this.$t('Name')"
 					:validate-status="modal.nameStatus"
@@ -36,6 +36,7 @@
 			tableLayout='auto'
 			:rowKey="getRowKey"
 			:loading="isLoading"
+			:scroll="{ x: 700 }"
 		>
 			<a slot="name" slot-scope="text">{{ text }}</a>
 			<span slot="id" slot-scope="id">{{ id+1 }}</span>
@@ -101,7 +102,7 @@ export default {
 				id: -1,
 				name: "",
 				link: "",
-				form: this.$form.createForm(this, { name: 'coordinated' }),
+				formVariable: this.$form.createForm(this, { name: 'coordinated' }),
 				nameStatus: "",
 				help: "",
 			}
