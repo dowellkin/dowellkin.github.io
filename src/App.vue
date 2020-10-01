@@ -61,7 +61,7 @@
         <a-breadcrumb style="margin: 16px 0">
           <a-breadcrumb-item>{{$t(current[0])}}</a-breadcrumb-item>
         </a-breadcrumb>
-        <div :style="{ padding: '24px', background: '#fff', minHeight: '360px' }">
+        <div class="mainView">
 					<router-view />
         </div>
       </a-layout-content>
@@ -182,5 +182,17 @@ export default {
 }
 .weekChoice.uncollapsed.chosen{
 	color: #fff;
+}
+
+.mainView{
+	padding: 24px;
+	background: #fff;
+	min-height: 360px
+}
+
+@media screen and (max-width: 862px) {
+	.mainView{
+		padding: 24px 5px;
+	}
 }
 </style>

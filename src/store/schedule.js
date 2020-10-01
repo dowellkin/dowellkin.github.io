@@ -111,7 +111,6 @@ export default {
 				}
 				sch.push(dayArr);
 			}
-			console.log("~~~", sch);
 			return sch
 		},
 		isLoading(state){
