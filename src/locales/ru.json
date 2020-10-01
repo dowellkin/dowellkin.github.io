@@ -9,6 +9,8 @@
   "Saturday": "Суббота",
 
 	"More": "Подробнее",
+	"Yes": "Да",
+	"No": "Нет",
 
 	"Teachers": "Преподаватели",
 
@@ -23,8 +25,14 @@
 
 	"Week choise": "Выбор недели",
 	"Auth": "Аутентификация",
+	"logout": "Выйти",
+	"login": "Войти",
 
 	"Name must be longer than 5 letters": "Имя должно быть длиннее 5 символов",
+	"Log into your profile for more options": "Войти в свой профиль для получения дополнительных возможностей",
+	"You are welcome": "Добро пожаловать",
+	"Adjust the settings to make your use of SCHEDO services even more convenient.": "Отрегулируйте настройки, чтобы вам было еще удобнее пользоваться услугами SCHEDO.",
+	"Do you really want to leave?": "Вы действительно хотите выйти?",
 
 	"Cancel": "Отмена"
 }

@@ -9,6 +9,8 @@
 	"Saturday": "Saturday",
 
 	"More": "More",
+	"Yes": "Yes",
+	"No": "No",
 
 	"Teachers": "Teachers",
 
@@ -23,8 +25,14 @@
 
 	"Week choise": "Week choise",
 	"Auth": "Authentication",
+	"logout": "Logout",
+	"login": "Login",
 
 	"Name must be longer than 5 letters": "Name must be longer than 5 letters",
+	"Log into your profile for more options": "Log into your profile for more options",
+	"You are welcome": "You are welcome",
+	"Adjust the settings to make your use of SCHEDO services even more convenient.": "Adjust the settings to make your use of SCHEDO services even more convenient.",
+	"Do you really want to leave?": "Do you really want to leave?",
 
 	"Cancel": "Cancel"
 }

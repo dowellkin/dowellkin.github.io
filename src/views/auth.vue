@@ -1,57 +1,24 @@
 <template>
 	<div class="auth">
-		<div v-if="!this.user.loggedIn" class="notAuth">
-			<h1>Test page</h1>
-			<a-button type="primary" @click="auth">
-				Auth
-			</a-button>
-		</div>
-		<div v-else>
-			<p>
-				Welcome, {{user.data.displayName}}
-			</p>
-			<a-button type="danger" @click="logout">Logout</a-button>
-		</div>
+		<logined v-if="this.user.loggedIn" ></logined>
+		<guest v-else></guest>
   </div>
 </template>
 
 <script>
-import firebase from 'firebase/app'
-import 'firebase/auth'
-
+import logined from "../components/auth/logined";
+import guest from "../components/auth/guest";
 import {mapGetters} from 'vuex'
 export default {
 	name: "AuthPage",
-	methods: {
-		auth(){
-			const provider = new firebase.auth.GoogleAuthProvider();
-			firebase.auth().languageCode = 'ru';
-			firebase.auth().signInWithPopup(provider)
-			.then(() => {
-				// console.log("result: ", result);
-				this.$message.success("Вы успешно вошли в аккаунт")
-			})
-			.catch( err => {
-				console.error(err);
-			})
-		},
-		logout(){
-			firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          this.$message.success("Вы успешно вышли из аккаунта")
-        })
-				.catch( err => {
-					console.error(err);
-				});
-		}
+	components: {
+		logined, guest
 	},
-	mounted(){
-		if(this.user.loggedIn){
-			console.log(this.user);
-		}
-	},
+	// mounted(){
+	// 	if(this.user.loggedIn){
+	// 		console.log(this.user);
+	// 	}
+	// },
 	computed: {
 		...mapGetters(['user'])
 	}
