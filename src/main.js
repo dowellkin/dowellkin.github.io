@@ -30,12 +30,13 @@ firebase.auth().onAuthStateChanged(user => {
 	store.dispatch("fetchUser", user);
 	const savedUser = store.getters.user.data;
 	if(savedUser != null){
-		firebase.database().ref('permissions/' + savedUser.uid).once("value")
+		firebase.database().ref('users/' + savedUser.uid).once("value")
 		.then(snap=>{
 			if (snap.val() != undefined) {
-				store.commit("SET_PERMISSIONS", snap.val());
+				store.commit("SET_USERINFO", snap.val());
+				store.dispatch("fetchParams");
 			} else {
-				firebase.database().ref('permissions/' + savedUser.uid).set("user")
+				firebase.database().ref('users/' + savedUser.uid + "/role").set("user")
 			}
 		});
 	}

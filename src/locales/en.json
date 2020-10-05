@@ -27,6 +27,7 @@
 	"Auth": "Authentication",
 	"logout": "Logout",
 	"login": "Login",
+	"Google drive": "Google drive",
 
 	"Name must be longer than 5 letters": "Name must be longer than 5 letters",
 	"Log into your profile for more options": "Log into your profile for more options",

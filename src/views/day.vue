@@ -263,7 +263,7 @@ export default {
 		position: absolute;
 		width: 98%;
 		border-radius: 3px;
-		padding: 0 10px;
+		padding: 0 5px;
 		background-color: rgba(55,74,103, .8);
 		border: 1px solid rgb(55,74,103);
 		transition: transform .2s ease;

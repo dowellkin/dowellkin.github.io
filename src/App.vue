@@ -35,7 +35,7 @@
 				</a-popover>
 				
 			</div>
-      <a-menu theme="dark" v-model="current" :default-selected-keys="['Schedule']" mode="inline">
+      <a-menu theme="dark" v-model="current" :default-selected-keys="['Schedule']" mode="inline" @click="menuSelect">
         <a-menu-item key="Schedule">
 					<router-link to="/">
 						<a-icon type="calendar" />
@@ -47,6 +47,12 @@
 						<a-icon type="team" />
 						<span>{{$t('Teachers')}}</span>
 					</router-link>
+        </a-menu-item>
+        <a-menu-item v-if="user.drive" key="Google drive">
+					<a :href="user.drive">
+						<a-icon type="cloud-download" />
+						<span>{{$t('Google drive')}}</span>
+					</a>
         </a-menu-item>
         <a-menu-item key="Auth">
 					<router-link to="/auth">
@@ -82,7 +88,8 @@ export default {
 			collapsed: true,
 			visible: false,
 			current: ["Schedule"],
-			weeks: [1,2,3,4]
+			weeks: [1,2,3,4],
+			history: []
 		}
 	},
 	methods: {
@@ -108,7 +115,7 @@ export default {
 		})
 	},
 	computed: {
-		...mapGetters(['getWeekNum', 'getWeek']),
+		...mapGetters(['getWeekNum', 'getWeek', 'user']),
 		visiblePopup(){
 			return this.collapsed && this.visible;
 		}

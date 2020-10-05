@@ -27,6 +27,7 @@
 	"Auth": "Аутентификация",
 	"logout": "Выйти",
 	"login": "Войти",
+	"Google drive": "Google Диск",
 
 	"Name must be longer than 5 letters": "Имя должно быть длиннее 5 символов",
 	"Log into your profile for more options": "Войти в свой профиль для получения дополнительных возможностей",
