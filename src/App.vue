@@ -35,7 +35,7 @@
 				</a-popover>
 				
 			</div>
-      <a-menu theme="dark" v-model="current" :default-selected-keys="['Schedule']" mode="inline" @click="menuSelect">
+      <a-menu theme="dark" v-model="current" :default-selected-keys="['Schedule']" mode="inline">
         <a-menu-item key="Schedule">
 					<router-link to="/">
 						<a-icon type="calendar" />
