@@ -19,6 +19,12 @@ Vue.use(VueRouter)
 		path: '/teachers',
 		name: 'Teachers',
 		component: () => import('../views/teachers.vue')
+	},
+	{
+		path: '/*',
+		redirect: {
+			name: 'Schedule'
+		}
 	}
 ]
 
