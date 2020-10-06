@@ -7,6 +7,7 @@
 			:cancelText="$t('Cancel')"
       @ok="handleOk"
       @cancel="handleCancel"
+			:forceRender="true"
     >
 			<a-form :form="modal.formVariable" layout="vertical">
 				<a-form-item
@@ -14,19 +15,20 @@
 					:validate-status="modal.nameStatus"
 					:help="modal.help">
 					<a-input
-						v-decorator="['note', { rules: [{ required: true, message: 'Please input your note!' }] }]"
-						v-model="modal.name" :disabled="user.permissions != 'admin'"
+						v-decorator="['name', { rules: [{ required: true, message: 'Please input your note!' },
+																	{ validator: lenthMoreThan5, message: 'Length must be more than 5!' }] }]"
+						:disabled="permissions != 'admin'"
 					/>
 				</a-form-item>
 				<a-form-item :label="this.$t('Link')">
 					<a-input
-						v-decorator="['note', { rules: [{ required: true, message: 'Please input your note!' }] }]"
-						v-model="modal.link" type="url" :disabled="user.permissions != 'admin'"
+						v-decorator="['link', { rules: [{}] }]"
+						type="url" :disabled="permissions != 'admin'"
 					/>
 				</a-form-item>
 			</a-form>
 		</a-modal>
-		<div v-if="user.permissions == 'admin'" class="teachers__actions" style="margin-bottom: 15px">
+		<div v-if="permissions == 'admin'" class="teachers__actions" style="margin-bottom: 15px">
 			<a-button type="primary" icon="plus" @click='showModal("Add teacher")'>{{$t('Add teacher')}}</a-button>
 		</div>
 		<a-table
@@ -51,7 +53,7 @@
 				</a-button>
 			</span>
 			<span slot="action" slot-scope="text, record">
-				<a-button v-if="user.permissions == 'admin'" type="primary" size="small" icon="tool"  @click='showModal("Сhange", record.id)'>
+				<a-button v-if="permissions == 'admin'" type="primary" size="small" icon="tool"  @click='showModal("Сhange", record.id)'>
 					{{$t('Сhange')}}
 				</a-button>
 				<a-button v-else type="primary" size="small" icon="tool"  @click='showModal("Сhange", record.id)'>
@@ -109,7 +111,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['getTeachers', 'isLoading', 'user'])
+		...mapGetters(['getTeachers', 'isLoading', 'user', 'permissions'])
 	},
 	methods: {
 		getRowKey(text, index){
@@ -119,56 +121,64 @@ export default {
 			this.modal.id = id;
 			if(id >= 0){
 				const teacher = this.$store.getters['getTeacher'](id);
-				this.modal.name = teacher.name;
-				this.modal.link = teacher.link;
+				this.modal.formVariable.setFieldsValue({"name": teacher.name, "link": teacher.link})
 			} else {
-				this.modal.name = "";
-				this.modal.link = "";
+				this.modal.formVariable.setFieldsValue({"name": "", "link": ""})
 			}
 			this.modal.title = from;
       this.modal.visible = true;
     },
     handleOk() {
-			if(this.user.permissions != 'admin'){
+			if(this.user.userinfo.permissions != 'admin'){
 				this.modal.visible = false;
 				return;
 			}
-			if(this.modal.name.length < 6){
-				this.modal.nameStatus = "error";
-				this.modal.help = this.$t("Name must be longer than 5 letters");
-				return;
-			} else {
-				this.modal.nameStatus = "";
-				this.modal.help = "";
-			}
 			this.modal.confirmLoading = true;
-			let teacherid = NaN
-			if(this.modal.id > -1){
-				teacherid = this.modal.id;
-			} else {
-				teacherid = Math.max(...this.getTeachers.map(el => el.id))+1;
-			}
-			firebase.database().ref('options/teachers/').update({
-				[teacherid]: {
-					"id": teacherid,
-					"name": this.modal.name,
-					"link": this.modal.link
-					}
-				}, (error) => {
-					if(error) {
-						this.modal.confirmLoading = false;
-						this.$message.error("Что-то пошло не так");
-						console.error(error);
+			this.modal.formVariable.validateFields()
+				.then( res => {
+					let teacherid = NaN
+					if(this.modal.id > -1){
+						teacherid = this.modal.id;
 					} else {
-						this.modal.confirmLoading = false;
-						this.modal.visible = false;
-						this.$message.success("Преподаватель успешно обновлен");
+						teacherid = Math.max(...this.getTeachers.map(el => el.id))+1;
 					}
-				});
+					firebase.database().ref('options/teachers/').update({
+						[teacherid]: {
+							"id": teacherid,
+							"name": res.name,
+							"link": res.link
+							}
+						}, (error) => {
+							if(error) {
+								this.modal.confirmLoading = false;
+								this.$message.error(this.$t("Something went wrong."));
+								console.error(error);
+							} else {
+								this.modal.confirmLoading = false;
+								this.modal.visible = false;
+								this.$message.success(this.$t("Teacher updated"));
+							}
+						});
+				})
+				.catch( err => {
+					console.error(err);
+					this.modal.confirmLoading = false;
+					this.modal.nameStatus = "error";
+					this.modal.help = this.$t(err.errors.name.errors[0].message);
+				})
+			
     },
     handleCancel() {
       this.modal.visible = false;
-    },
+		},
+		lenthMoreThan5(rule, value, callback){
+			// console.log(form.validateFields());
+			if(value.length > 5){
+				callback();
+			} else {
+				callback(rule.message);
+			}
+		}
 	}
 }
 </script>

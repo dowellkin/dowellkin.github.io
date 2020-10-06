@@ -48,8 +48,13 @@
 										{{$t("More")}}
 									</div> -->
 								</template>
-								<div class="tasl__content">
-									<span class="task__time">({{task.startTime}}-{{task.endTime}})</span> {{lessonTitle(task.name)}} <span class="group" v-if="task.group">{{task.group == 3 ? "1, 2" : task.group}}г.</span>
+								<div class="task__content">
+									<div class="pair__info">
+										<span class="task__time">({{task.startTime}}-{{task.endTime}})</span> {{lessonTitle(task.name)}} <span class="group" v-if="task.group">{{task.group == 3 ? "1, 2" : task.group}}г.</span>
+									</div>
+									<div class="pair__cabinet">
+										{{task.room}}
+									</div>
 								</div>
 							</a-popover>
 						</div>
@@ -139,6 +144,14 @@ export default {
 		lessonTitle(title){
 			if(title.length > 22){
 				return title.split(" ").map(el => el.length > 2 ? el[0].toUpperCase() : el[0]).join("");
+			} else if(title.length > 20){
+				return title.split(" ").map(el => {
+					if(el.length > 2){
+						return el[0].toUpperCase() + el[1] + el[2];
+					} else {
+						return el
+					}
+				}).join("");
 			}
 			return title
 		}
@@ -200,7 +213,7 @@ export default {
     padding-left: 5px;
     position: relative;
 	}
-	.day__lines-item:not(:first-child){
+	.day__lines-item{
 		border-top: 1px solid lightgray;
 	}
 	.day__lines-column{
@@ -227,6 +240,7 @@ export default {
 		left: 0;
 		right: 0;
 		z-index: 1;
+		border-top: none;
 	}
 
 	.day__time-current{
@@ -300,5 +314,15 @@ export default {
 	}
 	.swing-enter, .swing-leave-to {
 		opacity: 0;
+	}
+
+	.task__time{
+		position: relative;
+	}
+
+	.pair__cabinet{
+		position: absolute;
+		top: 0;
+		right: 5px;
 	}
 </style>

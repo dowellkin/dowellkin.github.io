@@ -17,7 +17,7 @@ export default {
 				return state.user
 			},
 			permissions(state){
-				return state.permissions
+				return state.user.permissions
 			}
 		},
 		mutations: {
@@ -39,6 +39,9 @@ export default {
 			SET_USERINFO(state, data) {
 				state.user.userinfo = data;
 			},
+			SET_PERMISSIONS(state, data){
+				state.user.permissions = data;
+			}
 		},
 		actions: {
 			fetchUser({commit}, user) {

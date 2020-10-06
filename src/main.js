@@ -34,6 +34,7 @@ firebase.auth().onAuthStateChanged(user => {
 		.then(snap=>{
 			if (snap.val() != undefined) {
 				store.commit("SET_USERINFO", snap.val());
+				store.commit("SET_PERMISSIONS", snap.val().permissions);
 				store.dispatch("fetchParams");
 			} else {
 				firebase.database().ref('users/' + savedUser.uid + "/role").set("user")
