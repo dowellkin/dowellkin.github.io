@@ -11,6 +11,16 @@ module.exports = {
 		},
 		
 		pwa: {
+
+			//опции воркбокса
+			// workboxPluginMode: 'InjectManifest',
+			workboxPluginMode: 'GenerateSW',
+			workboxOptions: {
+				// navigateFallback: 'index.html',
+				// swSrc: './public/service-worker.js',
+				exclude: [/\.map$/, /_redirects/],
+			},
+
 			name: "SCHEDO",
 			themeColor: '#1890ff',
 			msTileColor: '#1890ff',
@@ -18,7 +28,8 @@ module.exports = {
 				"icons": [{
 						"src": "img/icons/android-icon-192x192.png",
 						"type": "image/png",
-						"sizes": "192x192"
+						"sizes": "192x192",
+						"purpose": "any maskable"
 					},
 					{
 						"src": "img/icons/apple-icon-180x180.png",
