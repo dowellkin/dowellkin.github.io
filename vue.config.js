@@ -25,21 +25,47 @@ module.exports = {
 			themeColor: '#1890ff',
 			msTileColor: '#1890ff',
 			manifestOptions: {
-				"icons": [{
-						"src": "img/icons/android-icon-192x192.png",
+				"icons": [
+					{
+						"src": "img/icons/android-launchericon-512-512.png",
+						"type": "image/png",
+						"sizes": "512x512",
+					},
+					{
+						"src": "img/icons/android-launchericon-192-192.png",
 						"type": "image/png",
 						"sizes": "192x192",
 						"purpose": "any maskable"
 					},
 					{
+						"src": "img/icons/android-launchericon-144-144.png",
+						"type": "image/png",
+						"sizes": "144x144",
+					},
+					{
+						"src": "img/icons/android-launchericon-96-96.png",
+						"type": "image/png",
+						"sizes": "96x96",
+					},
+					{
+						"src": "img/icons/android-launchericon-72-72.png",
+						"type": "image/png",
+						"sizes": "72x72",
+					},
+					{
+						"src": "img/icons/android-launchericon-48-48.png",
+						"type": "image/png",
+						"sizes": "48x48",
+					},
+					{
 						"src": "img/icons/apple-icon-180x180.png",
 						"type": "image/png",
-						"sizes": "180x180"
+						"sizes": "180x180",
 					},
 					{
 						"src": "img/icons/apple-icon-152x152.png",
 						"type": "image/png",
-						"sizes": "152x152"
+						"sizes": "152x152",
 					},
 					{
 						"src": "img/icons/apple-icon-144x144.png",
@@ -80,6 +106,11 @@ module.exports = {
 						"src": "img/icons/apple-icon-57x57.png",
 						"type": "image/png",
 						"sizes": "57x57"
+					},
+					{
+						"src": "img/icons/favicon-96x96.png",
+						"type": "image/png",
+						"sizes": "96x96"
 					},
 					{
 						"src": "img/icons/favicon-32x32.png",
