@@ -16,6 +16,30 @@ export default {
 			user(state) {
 				return state.user
 			},
+			groups(state) {
+				return state.user.groups
+			},
+			userinfo(state) {
+				return state.user.userinfo
+			},
+			groupId(state) {
+				return state.user.userinfo.group
+			},
+			subgroup(state) {
+				if (state.user.userinfo)
+					return state.user.userinfo.subgroup
+				else
+					return -1	
+			},
+			showMySub(state) {
+				if (state.user.userinfo)
+					return state.user.userinfo.showMySub
+				else
+					return false
+			},
+			groupName(state, getters) {
+				return getters.groups[getters.groupId];
+			},
 			permissions(state){
 				return state.user.permissions
 			}
@@ -38,6 +62,15 @@ export default {
 			},
 			SET_USERINFO(state, data) {
 				state.user.userinfo = data;
+			},
+			SET_USERGROUP(state, data) {
+				state.user.userinfo.group = data;
+			},
+			SET_USERSUBGROUP(state, data) {
+				state.user.userinfo.subgroup = data;
+			},
+			SET_SHOWONLYMYSUB(state, data) {
+				state.user.userinfo.showMySub = data;
 			},
 			SET_PERMISSIONS(state, data){
 				state.user.permissions = data;

@@ -48,7 +48,7 @@
 						<span>{{$t('Teachers')}}</span>
 					</router-link>
         </a-menu-item>
-        <a-menu-item v-if="user.drive" key="Google drive">
+        <a-menu-item v-if="user.isDrive" key="Google drive">
 					<a :href="user.drive">
 						<a-icon type="cloud-download" />
 						<span>{{$t('Google drive')}}</span>

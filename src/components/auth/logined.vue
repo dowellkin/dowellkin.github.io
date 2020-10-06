@@ -15,6 +15,52 @@
 				<p style="font-size: 1.1rem; text-align: center">{{$t('Adjust the settings to make your use of SCHEDO services even more convenient.')}}</p>
 			</a-col>
 		</a-row>
+
+		<template v-if="userinfo != undefined && groups != undefined">
+			<a-row type="flex" justify="space-around" style="margin-top: 15px" :gutter="[10, 20]">
+				<a-col :span="24" :xl="4" :lg="5" :md="7" :sm="10">
+					<p>
+						Группа
+					</p>
+					<a-select style="width: 100%" :defaultValue="$t(groupName).toUpperCase()" @change="groupChangeHandle" :loading="groupLoading">
+						<a-select-option v-for="(groupSelect, index) in groups" :value="index" :key="groupSelect">
+							{{$t(groupSelect).toUpperCase()}}
+						</a-select-option>
+					</a-select>
+				</a-col>
+
+				<a-col :span="24" :xl="4" :lg="5" :md="7" :sm="10">
+					<p>
+						Подгруппа
+					</p>
+					<a-select style="width: 100%" @change="subgroupChangeHandle" :defaultValue="subgroup + ' подгруппа'"  :loading="subgroupLoading">
+						<a-select-option :value="1">
+							1 подгруппа
+						</a-select-option>
+						<a-select-option :value="2">
+							2 подгруппа
+						</a-select-option>
+					</a-select>
+				</a-col>
+			</a-row>
+
+			<a-row type="flex" justify="space-around" style="margin-top: 15px" >
+				<a-col>
+					<p style="font-size: 1.1rem">
+						Показывать пары только своей подгруппы
+					<a-switch :checked="showMySub" @change="MyPairsHandle" :loading="showMySubLoading"/>	
+					</p>
+				</a-col>
+			</a-row>
+	</template>
+	<template v-else>
+		<a-row type="flex" justify="space-around">
+			<a-col>
+				<a-icon style="font-size: 2.5rem" type="loading"></a-icon>
+			</a-col>
+		</a-row>
+	</template>
+
 		<a-row type="flex" justify="center" style="margin-top: 15px">
 			<a-col>
 				<a-button @click="changeLanguage">
@@ -43,6 +89,14 @@ import 'firebase/auth'
 import {mapGetters} from 'vuex'
 export default {
 	name: "AuthPage_logined",
+	data(){
+		return {
+			onlyMySubgroup: false,
+			showMySubLoading: false,
+			subgroupLoading: false,
+			groupLoading: false
+		}
+	},
 	methods: {
 		logout(){
 			firebase
@@ -57,14 +111,53 @@ export default {
 		},
 		changeLanguage(){
 			this.$i18n.locale = this.$i18n.locale == "ru" ? "en" : "ru";
-		}
+		},
+		MyPairsHandle(value){
+			this.showMySubLoading = true;
+			firebase.database().ref('users/' + this.user.data.uid).child('showMySub').set(value, (error) => {
+				if(error){
+					this.$message.error(this.$t("Failed"));
+					this.showMySubLoading = false;
+				} else {
+					this.$store.commit("SET_SHOWONLYMYSUB", value);
+					this.showMySubLoading = false;
+				}
+			});
+		},
+		groupChangeHandle(value){
+			this.groupLoading = true;
+			firebase.database().ref('users/' + this.user.data.uid).child('group').set(""+value, (error) => {
+				if(error){
+					this.$message.error(this.$t("Failed"));
+					this.groupLoading = false;
+				} else {
+					this.$store.commit("SET_USERGROUP", value);
+					this.groupLoading = false;
+				}
+			});
+		},
+		subgroupChangeHandle(value){
+			this.subgroupLoading = true;
+			firebase.database().ref('users/' + this.user.data.uid).child('subgroup').set(value, (error) => {
+				if(error){
+					this.$message.error(this.$t("Failed"));
+					this.subgroupLoading = false;
+				} else {
+					this.$store.commit("SET_USERSUBGROUP", value);
+					this.subgroupLoading = false;
+				}
+			});
+		},
+
 	},
 	computed: {
-		...mapGetters(['user']),
+		...mapGetters(['user', 'groups', 'groupName', 'userinfo', 'subgroup', 'showMySub']),
 	}
 }
 </script>
 
 <style>
-
+.logined{
+	padding: 10px;
+}
 </style>

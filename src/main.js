@@ -30,15 +30,31 @@ firebase.auth().onAuthStateChanged(user => {
 	store.dispatch("fetchUser", user);
 	const savedUser = store.getters.user.data;
 	if(savedUser != null){
-		firebase.database().ref('users/' + savedUser.uid).once("value")
-		.then(snap=>{
-			if (snap.val() != undefined) {
+		const userDB = firebase.database().ref('users/' + savedUser.uid);
+		userDB.once("value")
+			.then(snap=>{
+				if (snap.val() != undefined) {
+					store.commit("SET_USERINFO", snap.val());
+					store.commit("SET_PERMISSIONS", snap.val().permissions);
+					store.dispatch("fetchParams");
+				} else {
+					// firebase.database().ref('users/' + savedUser.uid + "/permissions").set("user")
+					userDB.child("permissions").set("user");
+				}
+			});
+		userDB.on('value', snap => {
 				store.commit("SET_USERINFO", snap.val());
 				store.commit("SET_PERMISSIONS", snap.val().permissions);
 				store.dispatch("fetchParams");
-			} else {
-				firebase.database().ref('users/' + savedUser.uid + "/role").set("user")
-			}
+			})
+	} else {
+		store.commit("SET_ISDRIVE", false);
+		store.commit("SET_PERMISSIONS", "user");
+		store.commit("SET_USERINFO", {
+			group: "-1",
+			permissions: "user",
+			showMySub: false,
+			subgroup: null
 		});
 	}
 });

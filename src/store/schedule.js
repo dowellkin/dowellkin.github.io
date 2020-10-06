@@ -110,6 +110,7 @@ export default {
 						if (ct.custom || !ct.weeks.includes(getters.getWeek)) {
 							continue;
 						} else {
+							if (pair.group && (pair.group != 3 && pair.group != getters.subgroup) && getters.showMySub) continue;
 							pair.color = state.colors[pair.type] || state.colors["лк"];
 							pair.startTime = state.rings[pair.lessonNumber][0][0];
 							pair.endTime = state.rings[pair.lessonNumber][0][1];

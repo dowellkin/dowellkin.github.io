@@ -12,6 +12,10 @@
 	"Yes": "Yes",
 	"No": "No",
 
+	"it041": "it041",
+	"it042": "it042",
+	"sp041": "sp041",
+
 	"Teachers": "Teachers",
 
 	"Add teacher": "Add teacher",
@@ -22,6 +26,8 @@
 	"Id": "Id",
 	"Name": "Name",
 	"Link": "Link",
+	"Success": "Success",
+	"Failed": "Failed",
 
 	"Week choise": "Week choise",
 	"Auth": "Authentication",

@@ -50,7 +50,11 @@
 								</template>
 								<div class="task__content">
 									<div class="pair__info">
-										<span class="task__time">({{task.startTime}}-{{task.endTime}})</span> {{lessonTitle(task.name)}} <span class="group" v-if="task.group">{{task.group == 3 ? "1, 2" : task.group}}г.</span>
+										<span class="task__time">({{task.startTime}}-{{task.endTime}})</span>
+										{{lessonTitle(task.name)}}
+										<span class="group" v-if="task.group && !showMySub">
+											{{task.group == 3 ? "1, 2" : task.group}}г.
+										</span>
 									</div>
 									<div class="pair__cabinet">
 										{{task.room}}
@@ -91,7 +95,7 @@ export default {
 		getBias(){
 			return this.calculateBias(this.getEncodedTime)
 		},
-		...mapGetters(["getTime", "getDay", "getEncodedTime", "getHours", "getDays"])
+		...mapGetters(["getTime", "getDay", "getEncodedTime", "getHours", "getDays", "showMySub"])
 	},
 	methods: {
 		isNeedToShowMark(index){
@@ -144,7 +148,7 @@ export default {
 		lessonTitle(title){
 			if(title.length > 22){
 				return title.split(" ").map(el => el.length > 2 ? el[0].toUpperCase() : el[0]).join("");
-			} else if(title.length > 20){
+			} else if(title.length >= 20){
 				return title.split(" ").map(el => {
 					if(el.length > 2){
 						return el[0].toUpperCase() + el[1] + el[2];
