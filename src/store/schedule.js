@@ -3,13 +3,15 @@ export default {
 	actions: {
 		async loadSchedule(ctx, group = "it042") {
 			const db = firebase.database()
-			ctx.commit('makeIsLoading', true);
+			// ctx.commit('makeIsLoading', true);
 			const ref = db.ref('/schedule')
 			const ans = await ref.once("value")
 			ref.on('value', (snapshot) => {
 				ctx.commit('saveSchedule', snapshot.val()[group]);
+				localStorage.setItem("schedule", JSON.stringify(snapshot.val()[group]));
 			})
 			ctx.commit('saveSchedule', ans.val()[group]);
+			localStorage.setItem("schedule", JSON.stringify(ans.val()[group]));
 		},
 		async loadOptions(ctx) {
 			function pushData(data){
@@ -20,20 +22,34 @@ export default {
 				ctx.commit('saveTeachers', data.teachers);
 			}
 			const db = firebase.database()
-			ctx.commit('makeIsLoading', true);
+			// ctx.commit('makeIsLoading', true);
 			const ref = db.ref('/options');
 			const ans = await ref.once("value");
 			ref.on('value', (snapshot) => {
 				pushData(snapshot.val());
+				localStorage.setItem("options", JSON.stringify(snapshot.val()));
 			})
 			// console.log(ans.val());
 			pushData(ans.val());
+			localStorage.setItem("options", JSON.stringify(ans.val()));
 		},
-		async loadAll(ctx, group="it042"){
+		async loadAll(ctx, group = "it042") {
+			ctx.commit('makeIsLoading', true);
+			if (localStorage.getItem('schedule') != null && localStorage.getItem('options') != null) {
+				ctx.commit('saveSchedule', JSON.parse(localStorage.getItem('schedule')));
+				pushData(JSON.parse(localStorage.getItem('options')));
+				ctx.commit('makeIsLoading', false);
+			}
+			function pushData(data) {
+				ctx.commit('saveColors', data.colors);
+				ctx.commit('saveDays', data.days);
+				ctx.commit('saveLessons', data.lessons);
+				ctx.commit('saveRings', data.rings);
+				ctx.commit('saveTeachers', data.teachers);
+			}
 			await ctx.dispatch("loadSchedule", group);
 			await ctx.dispatch("loadOptions");
 			ctx.commit('makeIsLoading', false);
-
 		}
 	},
 
