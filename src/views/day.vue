@@ -25,8 +25,8 @@
 					<div class="day__tasks">
 						<transition-group name="swing">
 						<div
-							v-for="(task, index) in day"
-							:key="index" class="day__task task"
+							v-for="(task) in day"
+							:key="task.lessonNumber" class="day__task task"
 							:style="{
 								'top': `${getTopBias(task)}px`,
 								'height': `${getTaskHight(task)}px`,
