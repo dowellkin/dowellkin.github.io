@@ -33,7 +33,7 @@ export default {
 			pushData(ans.val());
 			localStorage.setItem("options", JSON.stringify(ans.val()));
 		},
-		async loadAll(ctx, group = "it042") {
+		async loadAll(ctx, group = "it042debug") {
 			ctx.commit('makeIsLoading', true);
 			if (localStorage.getItem('schedule') != null && localStorage.getItem('options') != null) {
 				ctx.commit('saveSchedule', JSON.parse(localStorage.getItem('schedule')));
@@ -98,34 +98,45 @@ export default {
 		fullScheldue(state, getters){
 			const schedule = state.mainSchedule;
 			const sch = [];
+			let path = [];
 			for(let day = 0; day < schedule.length; day++){
+				path[0] = day;
 				const d = schedule[day];
 				const dayArr = [];
 				if (d == undefined) schedule[day] = [];
-				for (let task = 0; task < schedule[day].length; task++) {
-					if (schedule[day][task] == undefined) schedule[day][task] = [];
-					for (let curTask = 0; curTask < schedule[day][task].length; curTask++) {
-						const ct = schedule[day][task][curTask];
+				// for (let task = 0; task < schedule[day].length; task++) {
+					if (schedule[day] == undefined) schedule[day] = [];
+					for (let curTask = 0; curTask < schedule[day].length; curTask++) {
+						path[1] = curTask
+						const ct = JSON.parse(JSON.stringify(schedule[day][curTask]));
+						ct.raw = JSON.parse(JSON.stringify(schedule[day][curTask]));
+						ct.raw.rawIndex = curTask;
+						ct.path = path;
 						const pair = ct;
 						if (ct.custom || !ct.weeks.includes(getters.getWeek)) {
 							continue;
 						} else {
 							if (pair.group && (pair.group != 3 && pair.group != getters.subgroup) && getters.showMySub) continue;
 							pair.color = state.colors[pair.type] || state.colors["лк"];
-							pair.startTime = state.rings[pair.lessonNumber][0][0];
-							pair.endTime = state.rings[pair.lessonNumber][0][1];
 							if (pair.lessonId >= 0)
 								pair.title = state.lessons[pair.lessonId];
 							if (pair.teacherId >= 0)
 								pair.teacher = state.teachers[pair.teacherId];
-							dayArr.push(pair);
-							let anotherPair = JSON.parse(JSON.stringify(pair));
-							pair.startTime = state.rings[pair.lessonNumber][1][0];
-							pair.endTime = state.rings[pair.lessonNumber][1][1];
-							dayArr.push(anotherPair);
+							
+							if(pair.half == "1" || pair.half == undefined){
+								pair.startTime = state.rings[pair.lessonNumber][0][0];
+								pair.endTime = state.rings[pair.lessonNumber][0][1];
+								dayArr.push(pair);
+							}
+							if(pair.half == "2" || pair.half == undefined){
+								let anotherPair = JSON.parse(JSON.stringify(pair));
+								pair.startTime = state.rings[pair.lessonNumber][1][0];
+								pair.endTime = state.rings[pair.lessonNumber][1][1];
+								dayArr.push(anotherPair);
+							}
 						}
 					}
-				}
+				// }
 				sch.push(dayArr);
 			}
 			return sch
@@ -144,6 +155,9 @@ export default {
 		},
 		getTeachers(state) {
 			return state.teachers;
+		},
+		getLessons(state) {
+			return state.lessons;
 		}
 	}
 }

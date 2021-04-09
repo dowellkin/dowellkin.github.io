@@ -9,8 +9,9 @@ export default {
 				permissions: null,
 				userinfo: null,
 				groups: null,
-				drive: null
-			}
+				drive: null,
+			},
+			isConfigure: false
 		},
 		getters: {
 			user(state) {
@@ -42,7 +43,10 @@ export default {
 			},
 			permissions(state){
 				return state.user.permissions
-			}
+			},
+			isConfigMode(state){
+				return state.isConfigure
+			},
 		},
 		mutations: {
 			SET_LOGGED_IN(state, value) {
@@ -74,7 +78,10 @@ export default {
 			},
 			SET_PERMISSIONS(state, data){
 				state.user.permissions = data;
-			}
+			},
+			setIsConfigure(state, data) {
+				return state.isConfigure = data;
+			},
 		},
 		actions: {
 			fetchUser({commit}, user) {

@@ -10,7 +10,7 @@
 					class="day__time-item day__time-item--current day__time-current"
 					:style="{'transform': 'translateY('+getBias+'px)'}"
 					>{{getTime}}</div>
-				<div class="day__time-item time__row" v-for="(time, index) in getLinesTime" :key="index">{{time}}</div>
+				<div class="day__time-item time__row" v-for="(time, index) in getLinesTime" :key="time + index">{{time}}</div>
 			</div>
 			<div class="day__main">
 				<div class="day__lines-column">
@@ -19,14 +19,14 @@
 						class="day__lines-item day__lines-item--current day__time-current"
 						:style="{'transform': 'translateY('+getBias+'px)'}"
 						></div>
-					<div class="day__lines-item time__row" v-for="(time, index) in getLinesTime" :key="index"></div>
+					<div class="day__lines-item time__row" v-for="(time, index) in getLinesTime" :key="time + index"></div>
 				</div>
 				<div class="day__task-wrapper">
 					<div class="day__tasks">
 						<transition-group name="swing">
 						<div
-							v-for="(task) in day"
-							:key="task.lessonNumber" class="day__task task"
+							v-for="(task, index) in day"
+							:key="task.lessonNumber + '' + index" class="day__task task"
 							:style="{
 								'top': `${getTopBias(task)}px`,
 								'height': `${getTaskHight(task)}px`,
@@ -44,9 +44,18 @@
 									<div class="popup__room">
 										{{task.room}}
 									</div>
-									<!-- <div class="link link--open-lesson">
-										{{$t("More")}}
-									</div> -->
+									<a-row type="flex" :gutter="[15, 0]">
+										<!-- <a-col>
+											<div class="link link__open-lesson">
+												{{$t("More")}}
+											</div>
+										</a-col> -->
+										<a-col v-if="isConfigMode">
+											<div class="link link__open-lesson" @click="editButtonHandler(task)">
+												{{$t("edit") | capitalize}}
+											</div>
+										</a-col>
+									</a-row>
 								</template>
 								<div class="task__content">
 									<div class="pair__info">
@@ -95,7 +104,7 @@ export default {
 		getBias(){
 			return this.calculateBias(this.getEncodedTime)
 		},
-		...mapGetters(["getTime", "getDay", "getEncodedTime", "getHours", "getDays", "showMySub"])
+		...mapGetters(["getTime", "getDay", "getEncodedTime", "getHours", "getDays", "showMySub", "isConfigMode"])
 	},
 	methods: {
 		isNeedToShowMark(index){
@@ -158,6 +167,10 @@ export default {
 				}).join("");
 			}
 			return title
+		},
+		editButtonHandler(task){
+			// console.log(task);
+			this.$emit('configlesson', { task, dayindex: this.index});
 		}
 	},
 	mounted(){
@@ -171,162 +184,162 @@ export default {
 </script>
 
 <style>
-	.day{
-		width: 300px;
-		margin-bottom: 10px;
-		overflow: hidden;
-		padding: 10px 10px;
-		border-radius: 10px;
-		box-shadow: 0px 0px 0px 1px rgba(0,0,0,.0);
-		transition: box-shadow .1s ease;
-	}
-	.day.current{
-		box-shadow: 0px 0px 0px 1px rgba(0,0,0,.05);
-	}
-	.day:hover{
-		box-shadow: 0px 0px 0px 1px rgba(0,0,0,.2);
-	}
-	.day__title{
-		margin-bottom: 5px;
-		text-align: center;
-		font-weight: bold;
-		font-size: 1rem;
-	}
-	.current .day__title::before,
-	.current .day__title::after{
-		content: "~";
-	}
-	.day__content{
-		padding-top: 10px;
-		display: flex;
-	}
-	.day__time-column{
-		position: relative;
-		margin-right: 5px;
-	}
-	.day__time-item{
-		text-align: right;
-		font-size: .8rem;
-		position: relative;
-		top: -10px;
-		user-select: none;
-	}
+.day{
+	width: 300px;
+	margin-bottom: 10px;
+	overflow: hidden;
+	padding: 10px 10px;
+	border-radius: 10px;
+	box-shadow: 0px 0px 0px 1px rgba(0,0,0,.0);
+	transition: box-shadow .1s ease;
+}
+.day.current{
+	box-shadow: 0px 0px 0px 1px rgba(0,0,0,.05);
+}
+.day:hover{
+	box-shadow: 0px 0px 0px 1px rgba(0,0,0,.2);
+}
+.day__title{
+	margin-bottom: 5px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1rem;
+}
+.current .day__title::before,
+.current .day__title::after{
+	content: "~";
+}
+.day__content{
+	padding-top: 10px;
+	display: flex;
+}
+.day__time-column{
+	position: relative;
+	margin-right: 5px;
+}
+.day__time-item{
+	text-align: right;
+	font-size: .8rem;
+	position: relative;
+	top: -10px;
+	user-select: none;
+}
 
-	.day__main{
-    flex-grow: 1;
-    padding-left: 5px;
-    position: relative;
-	}
-	.day__lines-item{
-		border-top: 1px solid lightgray;
-	}
-	.day__lines-column{
-		position: relative;
-	}
-	.time__row:not(:last-child){
-		height: 30px;
-	}
-	.day__time-item--current{
-		position: absolute;
-		color: red;
-		font-weight: bold;
-		right: 0;
-		background-color: rgba(255,255,255,.5);
-		z-index: 1;
-		font-size: .85rem;
-	}
-	.day__lines-item--current{
-		width: 100%;
-		height: 2px;
-		background: red;
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 1;
-		border-top: none;
-	}
+.day__main{
+	flex-grow: 1;
+	padding-left: 5px;
+	position: relative;
+}
+.day__lines-item{
+	border-top: 1px solid lightgray;
+}
+.day__lines-column{
+	position: relative;
+}
+.time__row:not(:last-child){
+	height: 30px;
+}
+.day__time-item--current{
+	position: absolute;
+	color: red;
+	font-weight: bold;
+	right: 0;
+	background-color: rgba(255,255,255,.5);
+	z-index: 1;
+	font-size: .85rem;
+}
+.day__lines-item--current{
+	width: 100%;
+	height: 2px;
+	background: red;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 1;
+	border-top: none;
+}
 
-	.day__time-current{
-		/* transform: translateY(); */
-		transition: transform .1s linear;
-	}
+.day__time-current{
+	/* transform: translateY(); */
+	transition: transform .1s linear;
+}
 
-	.day__lines-item--current::before{
-		content: '';
-		width: 10px;
-		height: 10px;
-		background: red;
-		position: absolute;
-		left: 0;
-		top: 0;
-		transform: translateY(-50%);
-		border-radius: 50%;
-	}
+.day__lines-item--current::before{
+	content: '';
+	width: 10px;
+	height: 10px;
+	background: red;
+	position: absolute;
+	left: 0;
+	top: 0;
+	transform: translateY(-50%);
+	border-radius: 50%;
+}
 
-	.day__task-wrapper{
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		padding: 0 0 18px 5px;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		/* overflow: hidden;  */
-	}
+.day__task-wrapper{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	padding: 0 0 18px 5px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	/* overflow: hidden;  */
+}
 
-	.task{
-		box-sizing: border-box;
-		position: absolute;
-		width: 98%;
-		border-radius: 3px;
-		padding: 0 5px;
-		background-color: rgba(55,74,103, .8);
-		border: 1px solid rgb(55,74,103);
-		transition: transform .2s ease;
-		right: 0;
-		left: 50%;
-		transform: translateX(-50%);
-	}
+.task{
+	box-sizing: border-box;
+	position: absolute;
+	width: 98%;
+	border-radius: 3px;
+	padding: 0 5px;
+	background-color: rgba(55,74,103, .8);
+	border: 1px solid rgb(55,74,103);
+	transition: transform .2s ease;
+	right: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
 
-	.task:hover{
-		transform: translateX(-50%) scale(1.02);
-	}
+.task:hover{
+	transform: translateX(-50%) scale(1.02);
+}
 
-	.task__time{
-		font-size: .6rem;
-		font-weight: bold;
-	}
+.task__time{
+	font-size: .6rem;
+	font-weight: bold;
+}
 
-	.day__tasks{
-		width: 100%;
-		height: 100%;
-		position: relative;
-	}
+.day__tasks{
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
 
-	.link {
-		color: #1890ff;
-		cursor: pointer;
-	}
-	.link:hover{
-		text-decoration: underline;
-	}
-	/* shitty animations */
-	.swing-enter-active, .swing-leave-active {
-		transition: opacity .2s ease, top .2s ease, left .2s ease;
-	}
-	.swing-enter, .swing-leave-to {
-		opacity: 0;
-	}
+.link {
+	color: #1890ff;
+	cursor: pointer;
+}
+.link:hover{
+	text-decoration: underline;
+}
+/* shitty animations */
+.swing-enter-active, .swing-leave-active {
+	transition: opacity .2s ease, top .2s ease, left .2s ease;
+}
+.swing-enter, .swing-leave-to {
+	opacity: 0;
+}
 
-	.task__time{
-		position: relative;
-	}
+.task__time{
+	position: relative;
+}
 
-	.pair__cabinet{
-		position: absolute;
-		top: 0;
-		right: 5px;
-	}
+.pair__cabinet{
+	position: absolute;
+	top: 0;
+	right: 5px;
+}
 </style>

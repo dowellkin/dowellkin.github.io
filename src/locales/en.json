@@ -26,8 +26,13 @@
 	"Id": "Id",
 	"Name": "Name",
 	"Link": "Link",
-	"Success": "Success",
-	"Failed": "Failed",
+	"success": "success",
+	"failed": "failed",
+
+	"edit": "edit",
+
+	"show pairs only for you subgroup": "show pairs only for you subgroup",
+	"pair configuration mode": "pair configuration mode",
 
 	"Week choise": "Week choise",
 	"Auth": "Authentication",

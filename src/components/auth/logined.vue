@@ -18,7 +18,7 @@
 
 		<template v-if="userinfo != undefined && groups != undefined">
 			<a-row type="flex" justify="space-around" style="margin-top: 15px" :gutter="[10, 20]">
-				<a-col :span="24" :xl="4" :lg="5" :md="7" :sm="10">
+				<a-col :span="24" :xl="6" :lg="5" :md="7" :sm="10">
 					<p>
 						Группа
 					</p>
@@ -29,7 +29,7 @@
 					</a-select>
 				</a-col>
 
-				<a-col :span="24" :xl="4" :lg="5" :md="7" :sm="10">
+				<a-col :span="24" :xl="6" :lg="5" :md="7" :sm="10">
 					<p>
 						Подгруппа
 					</p>
@@ -44,14 +44,29 @@
 				</a-col>
 			</a-row>
 
-			<a-row type="flex" justify="space-around" style="margin-top: 15px" >
-				<a-col>
-					<p style="font-size: 1.1rem">
-						Показывать пары только своей подгруппы
-					<a-switch :checked="showMySub" @change="MyPairsHandle" :loading="showMySubLoading"/>	
-					</p>
+			<a-row type="flex" justify="space-around" style="margin-top: 15px" :gutter="[10, 20]">
+				<a-col :span="24" :xl="6" :lg="5" :md="7" :sm="10">
+					<a-row type="flex" justify="space-between">
+						<a-col>
+							{{$t('show pairs only for you subgroup') | capitalize}}
+						</a-col>
+						<a-col>
+							<a-switch :checked="showMySub" @change="MyPairsHandle" :loading="showMySubLoading"/>	
+						</a-col>
+					</a-row>
+				</a-col>
+				<a-col v-if="user.permissions == 'admin'" :span="24" :xl="6" :lg="5" :md="7" :sm="10">
+					<a-row type="flex" justify="space-between">
+						<a-col>
+							{{$t('pair configuration mode') | capitalize}}
+						</a-col>
+						<a-col>
+							<a-switch :checked="isConfigMode" @change="(newState) => {$store.commit('setIsConfigure', newState)}" :loading="showMySubLoading"/>	
+						</a-col>
+					</a-row>
 				</a-col>
 			</a-row>
+
 	</template>
 	<template v-else>
 		<a-row type="flex" justify="space-around">
@@ -98,6 +113,9 @@ export default {
 		}
 	},
 	methods: {
+		test(e){
+			console.log(e);
+		},
 		logout(){
 			firebase
         .auth()
@@ -151,7 +169,7 @@ export default {
 
 	},
 	computed: {
-		...mapGetters(['user', 'groups', 'groupName', 'userinfo', 'subgroup', 'showMySub']),
+		...mapGetters(['user', 'groups', 'groupName', 'userinfo', 'subgroup', 'showMySub', 'isConfigMode']),
 	}
 }
 </script>

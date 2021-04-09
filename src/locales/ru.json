@@ -26,8 +26,13 @@
 	"Id": "№",
 	"Name": "ФИО",
 	"Link": "Ссылка",
-	"success": "Успешно",
-	"failed": "Ошибка",
+	"success": "успешно",
+	"failed": "ошибка",
+
+	"edit": "редактировать",
+
+	"show pairs only for you subgroup": "Показать пары только своей подгуппы",
+	"pair configuration mode": "режим редактирования",
 
 	"Week choise": "Выбор недели",
 	"Auth": "Аутентификация",
