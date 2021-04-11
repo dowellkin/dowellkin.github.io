@@ -104,7 +104,7 @@ export default {
 					.then(groups => {
 						if (groups.val() != undefined) {
 							ctx.commit("SET_GROUPS", groups.val());
-							const driveRef = db.ref('drive/' + ctx.state.groups[+ctx.state.user.userinfo.group]);
+							const driveRef = db.ref('drive/' + ctx.state.user.userinfo.group);
 							driveRef.once("value")
 								.then(drive => {
 									if (drive.val() != undefined) {

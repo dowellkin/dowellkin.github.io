@@ -22,7 +22,7 @@
 					<p>
 						Группа
 					</p>
-					<a-select style="width: 100%" :value="groups[+userinfo.group]" @change="groupChangeHandle" :loading="groupLoading">
+					<a-select style="width: 100%" :value="userinfo.group" @change="groupChangeHandle" :loading="groupLoading">
 						<a-select-option v-for="(groupSelect, index) in groups" :value="groupSelect" :key="groupSelect+index">
 							{{$t(groupSelect).toUpperCase()}}
 						</a-select-option>
