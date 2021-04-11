@@ -36,23 +36,25 @@
 							<a-popover :title="'пол пары (45 мин.)'">
 								<template slot="content">
 									<div>
-										{{task.name}} {{task.type != "none" ? ` (${task.type.toUpperCase()})` : ""}}
+										{{getLessons[task.lessonId].title || task.name}} {{task.type.match(/ЛК|ПЗ/i) ? ` (${task.type.toUpperCase()})` : ""}}
 									</div>
 									<div class="popup__teacher">
 										{{task.teacher.name}}
 									</div>
-									<div class="popup__room">
-										{{task.room}}
+									<div class="popup__room" v-if="task.room">
+										{{$t('room') | capitalize}}: {{task.room}}
 									</div>
-									<a-row type="flex" :gutter="[15, 0]">
-										<!-- <a-col>
-											<div class="link link__open-lesson">
-												{{$t("More")}}
-											</div>
-										</a-col> -->
-										<a-col v-if="isConfigMode">
-											<div class="link link__open-lesson" @click="editButtonHandler(task)">
+									<a-row v-if="isConfigMode" type="flex" :gutter="[15, 0]">
+										<a-col>
+											<div class="link link__open-lesson" @click="handleButttonEdit(task)">
 												{{$t("edit") | capitalize}}
+											</div>
+										</a-col>
+									</a-row>
+									<a-row type="flex" :gutter="[15, 0]">
+										<a-col>
+											<div class="link link__open-lesson" @click="handleButtonDetails(task)">
+												{{$t("details") | capitalize}}
 											</div>
 										</a-col>
 									</a-row>
@@ -60,7 +62,7 @@
 								<div class="task__content">
 									<div class="pair__info">
 										<span class="task__time">({{task.startTime}}-{{task.endTime}})</span>
-										{{lessonTitle(task.name)}}
+										{{lessonTitle(task)}}
 										<span class="group" v-if="task.group && !showMySub">
 											{{task.group == 3 ? "1, 2" : task.group}}г.
 										</span>
@@ -104,7 +106,7 @@ export default {
 		getBias(){
 			return this.calculateBias(this.getEncodedTime)
 		},
-		...mapGetters(["getTime", "getDay", "getEncodedTime", "getHours", "getDays", "showMySub", "isConfigMode"])
+		...mapGetters(["getTime", "getDay", "getEncodedTime", "getHours", "getDays", "showMySub", "isConfigMode", "getLessons"])
 	},
 	methods: {
 		isNeedToShowMark(index){
@@ -154,7 +156,12 @@ export default {
 			const color = this.parseHexColor(task.color);
 			return `rgb(${color[0]},${color[1]},${color[2]})`;
 		},
-		lessonTitle(title){
+		lessonTitle(task){
+			let title = task.name.title || task.name;
+			let lessonFromFirebase = this.getLessons[task.lessonId];
+			if(lessonFromFirebase && lessonFromFirebase.shorttitle != undefined){
+				return lessonFromFirebase.shorttitle;
+			}
 			if(title.length > 22){
 				return title.split(" ").map(el => el.length > 2 ? el[0].toUpperCase() : el[0]).join("");
 			} else if(title.length >= 20){
@@ -166,11 +173,20 @@ export default {
 					}
 				}).join("");
 			}
+			if(lessonFromFirebase && lessonFromFirebase.title){
+				return lessonFromFirebase.title
+			}
 			return title
 		},
-		editButtonHandler(task){
-			// console.log(task);
-			this.$emit('configlesson', { task, dayindex: this.index});
+		handleButttonEdit(task){
+			this.$store.commit('edit/showForEdit');
+			this.$store.commit('edit/setParams', {...task.raw, day: this.index});
+			// this.$emit('configlesson', { task, dayindex: this.index});
+		},
+		handleButtonDetails(task){
+			this.$store.commit('edit/showForLook');
+			this.$store.commit('edit/setParams', {...task.raw, day: this.index});
+			// this.$emit('configlesson', { task, dayindex: this.index});
 		}
 	},
 	mounted(){

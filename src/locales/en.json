@@ -23,11 +23,21 @@
 	"Look": "Look",
 	"Action": "Action",
 
+	"Lessons": "Предметы",
+	"Title": "Title",
+	"Short title": "Short title",
+
 	"Id": "Id",
 	"Name": "Name",
 	"Link": "Link",
 	"success": "success",
 	"failed": "failed",
+	"delete": "delete",
+
+
+	"Are you sure delete this lesson?": "Are you sure delete this lesson?",
+	"Are you sure delete this task?": "Are you sure delete this task?",
+	"Add lesson": "Add lesson",
 
 	"edit": "edit",
 
@@ -40,6 +50,16 @@
 	"login": "Login",
 	"Google drive": "Google drive",
 
+	"details": "details",
+	"Lesson config": "Lesson config",
+	"lesson": "lesson",
+	"teacher": "teacher",
+	"day of week": "day of week",
+	"number": "number",
+	"room": "room",
+	"type": "type",
+	"weeks": "weeks",
+
 	"Name must be longer than 5 letters": "Name must be longer than 5 letters",
 	"Log into your profile for more options": "Log into your profile for more options",
 	"You are welcome": "You are welcome",
@@ -47,6 +67,7 @@
 	"Do you really want to leave?": "Do you really want to leave?",
 	"Something went wrong.": "Something went wrong.",
 	"Teacher updated": "Teacher updated",
+	"lesson updated": "lesson updated",
 	"Length must be more than 5!": "Length must be more than 5!",
 	"Please input your note!": "Please input your note!",
 

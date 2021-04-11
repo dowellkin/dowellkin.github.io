@@ -22,8 +22,8 @@
 					<p>
 						Группа
 					</p>
-					<a-select style="width: 100%" :defaultValue="$t(groupName).toUpperCase()" @change="groupChangeHandle" :loading="groupLoading">
-						<a-select-option v-for="(groupSelect, index) in groups" :value="index" :key="groupSelect">
+					<a-select style="width: 100%" :value="groups[+userinfo.group]" @change="groupChangeHandle" :loading="groupLoading">
+						<a-select-option v-for="(groupSelect, index) in groups" :value="groupSelect" :key="groupSelect+index">
 							{{$t(groupSelect).toUpperCase()}}
 						</a-select-option>
 					</a-select>
@@ -33,7 +33,7 @@
 					<p>
 						Подгруппа
 					</p>
-					<a-select style="width: 100%" @change="subgroupChangeHandle" :defaultValue="subgroup + ' подгруппа'"  :loading="subgroupLoading">
+					<a-select style="width: 100%" @change="subgroupChangeHandle" :value="subgroup"  :loading="subgroupLoading">
 						<a-select-option :value="1">
 							1 подгруппа
 						</a-select-option>

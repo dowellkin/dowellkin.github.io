@@ -1,19 +1,19 @@
 <template>
 	<div class="schedule-wrapper">
-		<div class="admin__buttons" v-if="user.permissions = 'admin'" style="margin-bottom: 20px">
-			<a-button-group>
-				<a-button icon="plus" type="primary" @click="() => modal.lessonsConfigure = true">
+		<div class="admin__buttons" v-if="user.permissions == 'admin'" style="margin-bottom: 20px">
+			<a-button-group v-if="isConfigMode">
+				<a-button icon="plus" type="primary" @click="() => $store.commit('edit/showEdit')">
 					{{$t('Добавить занятие')}}
 				</a-button>
 			</a-button-group>
 			<a-modal
-				title="Lesson config"
-				:visible="modal.lessonsConfigure"
-				@ok="(params) => handleModalOk('lessonsConfigure', ...params)"
-				@cancel="(params) => handleModalOk('lessonsConfigure', ...params)"
+				:title="$t('Lesson config')"
+				:visible="isShowfield"
+				@ok="() => $store.commit('edit/closeEdit')"
+				@cancel="() => $store.commit('edit/closeEdit')"
 				:footer="null"
 			>
-				<lesson-configure :day="lessonConfig.day" :options="lessonConfig.task" :edit="lessonConfig.edit" @done="(params) => handleModalOk('lessonsConfigure', ...params)"/>
+				<lesson-configure @done="() => $store.commit('edit/closeEdit')"/>
 			</a-modal>
 		</div>
 		<transition name="loadingAnim">
@@ -40,21 +40,6 @@ export default {
 	},
 	data(){
 		return {
-			modal: {
-				lessonsConfigure: false
-			},
-			lessonConfig: {
-				day: 0,
-				edit: false,
-				task: {
-					lessonId: 0,
-					teacherId: 0,
-					lessonNumber: 1,
-					type: '',
-					room: '',
-					weeks: [false, false, false, false]
-				}
-			}
 		}
 	},
 	methods: {
@@ -71,7 +56,10 @@ export default {
 			this.modal.lessonsConfigure = true
 		}
 	},
-	computed: mapGetters(['fullScheldue', 'isLoading', 'user'])
+	computed: {
+		...mapGetters(['fullScheldue', 'isLoading', 'user', 'isConfigMode']),
+		...mapGetters('edit', ['isShowfield'])
+	}
 }
 </script>
 

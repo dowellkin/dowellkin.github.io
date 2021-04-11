@@ -29,7 +29,6 @@ export default {
 				pushData(snapshot.val());
 				localStorage.setItem("options", JSON.stringify(snapshot.val()));
 			})
-			// console.log(ans.val());
 			pushData(ans.val());
 			localStorage.setItem("options", JSON.stringify(ans.val()));
 		},
@@ -57,7 +56,7 @@ export default {
 		mainSchedule: [],
 		colors: {},
 		days: [],
-		lessons: [],
+		lessons: {},
 		rings: [],
 		teachers: [],
 		isLoading: false
@@ -104,9 +103,8 @@ export default {
 				const d = schedule[day];
 				const dayArr = [];
 				if (d == undefined) schedule[day] = [];
-				// for (let task = 0; task < schedule[day].length; task++) {
 					if (schedule[day] == undefined) schedule[day] = [];
-					for (let curTask = 0; curTask < schedule[day].length; curTask++) {
+					for (let curTask in d) {
 						path[1] = curTask
 						const ct = JSON.parse(JSON.stringify(schedule[day][curTask]));
 						ct.raw = JSON.parse(JSON.stringify(schedule[day][curTask]));

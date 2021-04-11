@@ -23,11 +23,21 @@
 	"Look": "Осмотреть",
 	"Action": "Действие",
 
+	"Lessons": "Предметы",
+	"Title": "Название",
+	"Short title": "Короткое название",
+
 	"Id": "№",
 	"Name": "ФИО",
 	"Link": "Ссылка",
 	"success": "успешно",
 	"failed": "ошибка",
+	"delete": "удалить",
+
+	
+	"Are you sure delete this lesson?": "Вы уверены, что хотите удалить этот предмет?",
+	"Are you sure delete this task?": "Вы уверены, что хотите удалить это занятие?",
+	"Add lesson": "Добавить предмет",
 
 	"edit": "редактировать",
 
@@ -40,6 +50,16 @@
 	"login": "Войти",
 	"Google drive": "Google Диск",
 
+	"details": "подробнее",
+	"Lesson config": "Настройка занятия",
+	"lesson": "предмет",
+	"teacher": "преподаватель",
+	"day of week": "день недели",
+	"number": "номер",
+	"room": "кабинет",
+	"type": "тип",
+	"weeks": "недели",
+
 	"Name must be longer than 5 letters": "Имя должно быть длиннее 5 символов",
 	"Log into your profile for more options": "Войти в свой профиль для получения дополнительных возможностей",
 	"You are welcome": "Добро пожаловать",
@@ -47,6 +67,7 @@
 	"Do you really want to leave?": "Вы действительно хотите выйти?",
 	"Something went wrong.": "Что-то пошло не так.",
 	"Teacher updated": "Преподаватель успешно обновлен",
+	"lesson updated": "Предмет обновлен",
 	"Length must be more than 5!": "Длинна должна быть больше 5!",
 	"Please input your note!": "Введите значение!",
 

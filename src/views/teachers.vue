@@ -28,7 +28,7 @@
 				</a-form-item>
 			</a-form>
 		</a-modal>
-		<div v-if="permissions == 'admin'" class="teachers__actions" style="margin-bottom: 15px">
+		<div v-if="permissions == 'admin'" style="margin-bottom: 15px">
 			<a-button type="primary" icon="plus" @click='showModal("Add teacher")'>{{$t('Add teacher')}}</a-button>
 		</div>
 		<a-table
@@ -59,8 +59,8 @@
 				<a-button v-else type="primary" size="small" icon="tool"  @click='showModal("Сhange", record.id)'>
 					{{$t('Look')}}
 				</a-button>
-				</span>
-				<div
+			</span>
+			<div
 				slot="filterDropdown"
 				slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }"
 				style="padding: 8px"

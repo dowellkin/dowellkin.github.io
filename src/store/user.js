@@ -8,9 +8,9 @@ export default {
 				data: null,
 				permissions: null,
 				userinfo: null,
-				groups: null,
 				drive: null,
 			},
+			groups: null,
 			isConfigure: false
 		},
 		getters: {
@@ -18,7 +18,7 @@ export default {
 				return state.user
 			},
 			groups(state) {
-				return state.user.groups
+				return state.groups
 			},
 			userinfo(state) {
 				return state.user.userinfo
@@ -56,7 +56,7 @@ export default {
 				state.user.data = data;
 			},
 			SET_GROUPS(state, data) {
-				state.user.groups = data;
+				state.groups = data;
 			},
 			SET_DRIVE(state, data) {
 				state.user.drive = data;
@@ -104,7 +104,7 @@ export default {
 					.then(groups => {
 						if (groups.val() != undefined) {
 							ctx.commit("SET_GROUPS", groups.val());
-							const driveRef = db.ref('drive/' + ctx.state.user.groups[+ctx.state.user.userinfo.group]);
+							const driveRef = db.ref('drive/' + ctx.state.groups[+ctx.state.user.userinfo.group]);
 							driveRef.once("value")
 								.then(drive => {
 									if (drive.val() != undefined) {

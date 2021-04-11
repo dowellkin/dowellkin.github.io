@@ -48,11 +48,11 @@
 						<span>{{$t('Teachers')}}</span>
 					</router-link>
         </a-menu-item>
-        <a-menu-item v-if="user.isDrive" key="Google drive">
-					<a :href="user.drive">
-						<a-icon type="cloud-download" />
-						<span>{{$t('Google drive')}}</span>
-					</a>
+        <a-menu-item key="Lessons">
+					<router-link to="/lessons">
+						<a-icon type="book" />
+						<span>{{$t('Lessons')}}</span>
+					</router-link>
         </a-menu-item>
         <a-menu-item key="Auth">
 					<router-link to="/auth">
@@ -60,19 +60,25 @@
 						<span>{{$t('Auth')}}</span>
 					</router-link>
         </a-menu-item>
+        <a-menu-item v-if="user.isDrive" key="Google drive">
+					<a :href="user.drive">
+						<a-icon type="cloud-download" />
+						<span>{{$t('Google drive')}}</span>
+					</a>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
       <a-layout-content style="margin: 0 16px">
         <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item>{{$t(current[0])}}</a-breadcrumb-item>
+          <a-breadcrumb-item>{{$t(current[0]) | capitalize}}</a-breadcrumb-item>
         </a-breadcrumb>
         <div class="mainView">
 					<router-view />
         </div>
       </a-layout-content>
       <a-layout-footer style="text-align: center">
-        {{$t('Schedule')}} ©2020 Created by <a href="tg://resolve?domain=dowellkin">Korolev Alexandr</a>
+        {{$t('Schedule') | capitalize}} ©2020 Created by <a href="tg://resolve?domain=dowellkin">Korolev Alexandr</a>
       </a-layout-footer>
     </a-layout>
   </a-layout>
