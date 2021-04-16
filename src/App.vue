@@ -107,6 +107,50 @@ export default {
 			if(inner){
 				this.visible = false;
 			}
+		},
+
+		
+		skipWaiting(){
+			let worker = this.needToBeUpdated.worker;
+			console.log('worker', worker);
+			if(worker != undefined){
+				worker.active.postMessage({ type: 'SKIP_WAITING'});
+			}
+			this.hideNotification();
+			location.reload();
+			console.log('there is must be reload but i commeted it');
+		},
+		hideNotification(){
+			this.$store.commit('app/setUpdate', {worker: this.needToBeUpdated.worker, status: false})
+		},
+
+		openNotification() {
+			const key = `open${Date.now()}`;
+			this.$notification.open({
+				message: 'new content is avaliable',
+				description:
+					'',
+				btn: h => {
+					return h(
+						'a-button',
+						{
+							props: {
+								type: 'primary',
+								size: 'small',
+							},
+							on: {
+								click: () => {
+									this.$notification.close(key)
+									this.hideNotification();
+								},
+							},
+						},
+						'Reload',
+					);
+				},
+				key,
+				onClose: close,
+			});
 		}
 	},
 	created(){
@@ -122,10 +166,18 @@ export default {
 	},
 	computed: {
 		...mapGetters(['getWeekNum', 'getWeek', 'user']),
+		...mapGetters('app', ['isNeedReloadToBeUpdated']),
 		visiblePopup(){
 			return this.collapsed && this.visible;
 		}
 	},
+	watch: {
+		isNeedReloadToBeUpdated(needToReload){
+			if(needToReload){
+				this.openNotification();
+			}
+		}
+	}
 }
 </script>
 
