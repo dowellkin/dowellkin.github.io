@@ -169,7 +169,7 @@ export default {
 
 	},
 	computed: {
-		...mapGetters(['user', 'groups', 'groupName', 'userinfo', 'subgroup', 'showMySub', 'isConfigMode']),
+		...mapGetters(['user', 'groups', 'userinfo', 'subgroup', 'showMySub', 'isConfigMode']),
 	}
 }
 </script>

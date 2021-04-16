@@ -112,21 +112,20 @@ export default {
 				throw `day must be less, now it's: ${day}`
 			}
 
-			const path = `schedule/${ctx.rootGetters.groupName}debug/${day}`;
+			const path = `schedule/${ctx.rootGetters.groupId}debug/${day}`;
 
 			ctx.commit('setLoading', true);
 
 			if(!ctx.state.edit){
 				index = firebase.database().ref(path).push().key;
 			}
-			index, sendPair
 			return sendPair(path, index, data)
 				.finally(ctx.commit('setLoading', false));
 		},
 		lessonDelete(ctx){
 			const data = objCopy(ctx.state.fields);
 			ctx.commit('setLoading', true);
-			const path = `schedule/${ctx.rootGetters.groupName}debug/${data.day}`;
+			const path = `schedule/${ctx.rootGetters.groupId}debug/${data.day}`;
 			return sendPair(path, data.rawIndex, null)
 				.finally(ctx.commit('setLoading', false));
 		}
@@ -155,11 +154,13 @@ function sendPair(path, index, data) {
 	if(index == undefined){
 		throw 'index is underfined. Can\'t push data.';
 	}
+	console.log('send');
 	return new Promise( (resolve, reject) => {
 		firebase.database().ref(path).update({
 			[index]: data
 			}, (error) => {
 				if(error) {
+					console.error(error);
 					reject(error);
 				} else {
 					resolve();
