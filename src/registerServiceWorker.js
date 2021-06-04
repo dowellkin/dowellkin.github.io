@@ -22,6 +22,7 @@ if (process.env.NODE_ENV === 'production') {
     },
     updated (worker) {
 			store.commit('app/setUpdate', {worker, status: true});
+			console.log(worker);
       console.log('New content is available; please refresh.')
     },
     offline () {

@@ -118,7 +118,7 @@ export default {
 			}
 			this.hideNotification();
 			location.reload();
-			console.log('there is must be reload but i commeted it');
+			// console.log('there is must be reload but i commeted it');
 		},
 		hideNotification(){
 			this.$store.commit('app/setUpdate', {worker: this.needToBeUpdated.worker, status: false})
@@ -140,8 +140,8 @@ export default {
 							},
 							on: {
 								click: () => {
+									this.skipWaiting();
 									this.$notification.close(key)
-									this.hideNotification();
 								},
 							},
 						},
