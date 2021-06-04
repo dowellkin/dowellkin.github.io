@@ -1,7 +1,7 @@
 import firebase from 'firebase/app'
 export default {
 	actions: {
-		async loadSchedule(ctx, group = "it042") {
+		async loadSchedule(ctx, group = "it042debug") {
 			const db = firebase.database()
 			// ctx.commit('makeIsLoading', true);
 			const ref = db.ref('/schedule')
@@ -105,6 +105,7 @@ export default {
 				if (d == undefined) schedule[day] = [];
 					if (schedule[day] == undefined) schedule[day] = [];
 					for (let curTask in d) {
+						if(schedule[day][curTask] == undefined) continue
 						path[1] = curTask
 						const ct = JSON.parse(JSON.stringify(schedule[day][curTask]));
 						ct.raw = JSON.parse(JSON.stringify(schedule[day][curTask]));
