@@ -1,7 +1,10 @@
 import firebase from 'firebase/app'
+
+const defaultGroupname = 'it041';
+
 export default {
 	actions: {
-		async loadSchedule(ctx, group = "it042debug") {
+		async loadSchedule(ctx, group = defaultGroupname) {
 			const db = firebase.database()
 			// ctx.commit('makeIsLoading', true);
 			const ref = db.ref('/schedule')
@@ -32,9 +35,9 @@ export default {
 			pushData(ans.val());
 			localStorage.setItem("options", JSON.stringify(ans.val()));
 		},
-		async loadAll(ctx, group = "it042debug") {
+		async loadAll(ctx, group = defaultGroupname) {
 			ctx.commit('makeIsLoading', true);
-			if (localStorage.getItem('schedule') != null && localStorage.getItem('options') != null) {
+			if (localStorage.getItem('schedule') != null && localStorage.getItem('schedule') != 'undefined' && localStorage.getItem('options') != null) {
 				ctx.commit('saveSchedule', JSON.parse(localStorage.getItem('schedule')));
 				pushData(JSON.parse(localStorage.getItem('options')));
 				ctx.commit('makeIsLoading', false);
@@ -112,25 +115,27 @@ export default {
 						ct.raw.rawIndex = curTask;
 						ct.path = path;
 						const pair = ct;
+						console.log(ct);
 						if (ct.custom || !ct.weeks.includes(getters.getWeek)) {
 							continue;
 						} else {
 							if (pair.group && (pair.group != 3 && pair.group != getters.subgroup) && getters.showMySub) continue;
-							pair.color = state.colors[pair.type] || state.colors["лк"];
+							pair.color = state.colors[pair.type.toLowerCase()] || state.colors["лк"];
 							if (pair.lessonId >= 0)
 								pair.title = state.lessons[pair.lessonId];
 							if (pair.teacherId >= 0)
 								pair.teacher = state.teachers[pair.teacherId];
 							
 							if(pair.half == "1" || pair.half == undefined){
+								console.log(pair.lessonNumber);
 								pair.startTime = state.rings[pair.lessonNumber][0][0];
 								pair.endTime = state.rings[pair.lessonNumber][0][1];
 								dayArr.push(pair);
 							}
 							if(pair.half == "2" || pair.half == undefined){
 								let anotherPair = JSON.parse(JSON.stringify(pair));
-								pair.startTime = state.rings[pair.lessonNumber][1][0];
-								pair.endTime = state.rings[pair.lessonNumber][1][1];
+								anotherPair.startTime = state.rings[anotherPair.lessonNumber][1][0];
+								anotherPair.endTime = state.rings[anotherPair.lessonNumber][1][1];
 								dayArr.push(anotherPair);
 							}
 						}

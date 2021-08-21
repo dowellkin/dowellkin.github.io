@@ -36,7 +36,7 @@
 							<a-popover :title="'пол пары (45 мин.)'">
 								<template slot="content">
 									<div>
-										{{getLessons[task.lessonId].title || task.name}} {{task.type.match(/ЛК|ПЗ/i) ? ` (${task.type.toUpperCase()})` : ""}}
+										{{isHaveLessonId(task) ? getLessons[task.lessonId].title : task.name}} {{task.type.match(/ЛК|ПЗ/i) ? ` (${task.type.toUpperCase()})` : ""}}
 									</div>
 									<div class="popup__teacher">
 										{{task.teacher.name}}
@@ -109,6 +109,9 @@ export default {
 		...mapGetters(["getTime", "getDay", "getEncodedTime", "getHours", "getDays", "showMySub", "isConfigMode", "getLessons"])
 	},
 	methods: {
+		isHaveLessonId(task){
+			return task.lessonId && task.lessonId != -1
+		},
 		isNeedToShowMark(index){
 			const rules = [
 				index == this.getDay,
@@ -157,13 +160,13 @@ export default {
 			return `rgb(${color[0]},${color[1]},${color[2]})`;
 		},
 		lessonTitle(task){
-			let title = task.name.title || task.name;
+			let title = task.name?.title ?? task.name;
 			let lessonFromFirebase = this.getLessons[task.lessonId];
 			if(lessonFromFirebase && lessonFromFirebase.shorttitle != undefined){
 				return lessonFromFirebase.shorttitle;
 			}
 			if(title.length > 22){
-				return title.split(" ").map(el => el.length > 2 ? el[0].toUpperCase() : el[0]).join("");
+				return title.split(/ |-/).map(el => el.length > 2 ? el[0].toUpperCase() : el[0]).join("");
 			} else if(title.length >= 20){
 				return title.split(" ").map(el => {
 					if(el.length > 2){
@@ -357,5 +360,10 @@ export default {
 	position: absolute;
 	top: 0;
 	right: 5px;
+}
+
+.pair__info{
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 </style>

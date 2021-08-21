@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import day from './day.vue'
+import day from '../components/day.vue'
 import loading from '../components/loading'
 import lessonConfigure from '../components/lessonconfigure.vue'
 import {mapGetters} from "vuex"
