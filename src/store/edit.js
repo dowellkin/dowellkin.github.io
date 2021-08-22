@@ -112,7 +112,7 @@ export default {
 				throw `day must be less, now it's: ${day}`
 			}
 
-			const path = `schedule/${ctx.rootGetters.groupId}debug/${day}`;
+			const path = `schedule/${ctx.rootGetters.groupId}/${day}`;
 
 			ctx.commit('setLoading', true);
 
@@ -125,7 +125,7 @@ export default {
 		lessonDelete(ctx){
 			const data = objCopy(ctx.state.fields);
 			ctx.commit('setLoading', true);
-			const path = `schedule/${ctx.rootGetters.groupId}debug/${data.day}`;
+			const path = `schedule/${ctx.rootGetters.groupId}/${data.day}`;
 			return sendPair(path, data.rawIndex, null)
 				.finally(ctx.commit('setLoading', false));
 		}

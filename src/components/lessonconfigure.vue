@@ -129,7 +129,7 @@ for(let i = 1; i <= pairCount; i++){
 	numbers.push(i);
 }
 
-const types = ['ПЗ', 'ЛК', 'none']
+const types = ['ПЗ', 'ЛК', 'Ф', 'none']
 
 const weeks = [];
 const weeksChecked = [];
