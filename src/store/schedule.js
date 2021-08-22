@@ -53,6 +53,22 @@ export default {
 			}
 			await ctx.dispatch("loadOptions");
 			ctx.commit('makeIsLoading', false);
+		},
+
+		async loadLinks({commit, getters}){
+			const groupname = getters.user.userinfo?.group;
+			if(!groupname) {
+				console.log('can\'t load links... (empty groupname)');
+			}
+
+			const db = firebase.database()
+			const ref = db.ref(`/links/${groupname}`);
+
+			const ans = await ref.once("value")
+			commit('saveLinks', ans.val());
+			ref.on('value', (snapshot) => {
+				commit('saveLinks', snapshot.val());
+			})
 		}
 	},
 
@@ -63,6 +79,7 @@ export default {
 		lessons: {},
 		rings: [],
 		teachers: [],
+		links: {},
 		isLoading: false
 	},
 
@@ -75,6 +92,9 @@ export default {
 			data.none = "#6ab04c"
 			state.colors = data
 			// console.log('colors loaded:', data)
+		},
+		saveLinks(state, data) {
+			state.links = data
 		},
 		saveDays(state, data) {
 			state.days = data
@@ -163,6 +183,9 @@ export default {
 		},
 		getLessons(state) {
 			return state.lessons;
+		},
+		getLinks(state) {
+			return state.links;
 		}
 	}
 }
