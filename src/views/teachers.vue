@@ -152,6 +152,13 @@ export default {
               }, 0);
             }
           },
+					defaultSortOrder: 'descend',
+					sorter: (a, b) => {
+						a = a.name.toLowerCase();
+						b = b.name.toLowerCase();
+						return a < b
+					},
+					sortDirections: ['descend', 'ascend'],
 				},
 				{
 					title: this.$t('Link'),

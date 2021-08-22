@@ -16,85 +16,87 @@
 			</a-col>
 		</a-row>
 
-		<template v-if="userinfo != undefined && groups != undefined">
-			<a-row type="flex" justify="space-around" style="margin-top: 15px" :gutter="[10, 20]">
-				<a-col :span="24" :xl="6" :lg="5" :md="7" :sm="10">
-					<p>
-						Группа
-					</p>
-					<a-select style="width: 100%" :value="userinfo.group" @change="groupChangeHandle" :loading="groupLoading">
-						<a-select-option v-for="(groupSelect, index) in groups" :value="groupSelect" :key="groupSelect+index">
-							{{$t(groupSelect).toUpperCase()}}
-						</a-select-option>
-					</a-select>
-				</a-col>
+		<div class="settings__fields">
+			<template v-if="userinfo != undefined && groups != undefined">
+				<a-row type="flex" justify="space-around" style="margin-top: 15px" :gutter="[10, 20]">
+					<a-col :span="24">
+						<p>
+							Группа
+						</p>
+						<a-select style="width: 100%" :value="userinfo.group" @change="groupChangeHandle" :loading="groupLoading">
+							<a-select-option v-for="(groupSelect, index) in groups" :value="groupSelect" :key="groupSelect+index">
+								{{userCyrillic(groupSelect.toUpperCase())}}
+							</a-select-option>
+						</a-select>
+					</a-col>
 
-				<a-col :span="24" :xl="6" :lg="5" :md="7" :sm="10">
-					<p>
-						Подгруппа
-					</p>
-					<a-select style="width: 100%" @change="subgroupChangeHandle" :value="subgroup"  :loading="subgroupLoading">
-						<a-select-option :value="1">
-							1 подгруппа
-						</a-select-option>
-						<a-select-option :value="2">
-							2 подгруппа
-						</a-select-option>
-					</a-select>
+					<a-col :span="24">
+						<p>
+							Подгруппа
+						</p>
+						<a-select style="width: 100%" @change="subgroupChangeHandle" :value="subgroup"  :loading="subgroupLoading">
+							<a-select-option :value="1">
+								1 подгруппа
+							</a-select-option>
+							<a-select-option :value="2">
+								2 подгруппа
+							</a-select-option>
+						</a-select>
+					</a-col>
+				</a-row>
+
+				<a-row type="flex" justify="space-around" style="margin-top: 15px" :gutter="[10, 20]">
+					<a-col :span="24">
+						<a-row type="flex" justify="space-between">
+							<a-col>
+								{{$t('show pairs only for you subgroup') | capitalize}}
+							</a-col>
+							<a-col>
+								<a-switch :checked="showMySub" @change="MyPairsHandle" :loading="showMySubLoading"/>	
+							</a-col>
+						</a-row>
+					</a-col>
+					<a-col v-if="user.permissions == 'admin'" :span="24">
+						<a-row type="flex" justify="space-between">
+							<a-col>
+								{{$t('pair configuration mode') | capitalize}}
+							</a-col>
+							<a-col>
+								<a-switch :checked="isConfigMode" @change="(newState) => {$store.commit('setIsConfigure', newState)}" :loading="showMySubLoading"/>	
+							</a-col>
+						</a-row>
+					</a-col>
+				</a-row>
+
+		</template>
+		<template v-else>
+			<a-row type="flex" justify="space-around">
+				<a-col>
+					<a-icon style="font-size: 2.5rem" type="loading"></a-icon>
 				</a-col>
 			</a-row>
+		</template>
 
-			<a-row type="flex" justify="space-around" style="margin-top: 15px" :gutter="[10, 20]">
-				<a-col :span="24" :xl="6" :lg="5" :md="7" :sm="10">
-					<a-row type="flex" justify="space-between">
-						<a-col>
-							{{$t('show pairs only for you subgroup') | capitalize}}
-						</a-col>
-						<a-col>
-							<a-switch :checked="showMySub" @change="MyPairsHandle" :loading="showMySubLoading"/>	
-						</a-col>
-					</a-row>
-				</a-col>
-				<a-col v-if="user.permissions == 'admin'" :span="24" :xl="6" :lg="5" :md="7" :sm="10">
-					<a-row type="flex" justify="space-between">
-						<a-col>
-							{{$t('pair configuration mode') | capitalize}}
-						</a-col>
-						<a-col>
-							<a-switch :checked="isConfigMode" @change="(newState) => {$store.commit('setIsConfigure', newState)}" :loading="showMySubLoading"/>	
-						</a-col>
-					</a-row>
+			<a-row type="flex" justify="center" style="margin-top: 15px">
+				<a-col>
+					<a-button @click="changeLanguage">
+						Сменить язык / Change Language
+					</a-button>
 				</a-col>
 			</a-row>
-
-	</template>
-	<template v-else>
-		<a-row type="flex" justify="space-around">
-			<a-col>
-				<a-icon style="font-size: 2.5rem" type="loading"></a-icon>
-			</a-col>
-		</a-row>
-	</template>
-
-		<a-row type="flex" justify="center" style="margin-top: 15px">
-			<a-col>
-				<a-button @click="changeLanguage">
-					Сменить язык / Change Language
-				</a-button>
-			</a-col>
-		</a-row>
-		<a-row type="flex" justify="center" style="margin-top: 15px">
-			<a-col>
-				<a-popconfirm
-					:title="$t('Do you really want to leave?')"
-					:ok-text="$t('Yes')"
-					:cancel-text="$t('No')"
-					@confirm="logout"
-				>
-					<a-button type="danger">{{$t('logout')}}</a-button>
-				</a-popconfirm>
-			</a-col>
-		</a-row>
+			<a-row type="flex" justify="center" style="margin-top: 15px">
+				<a-col>
+					<a-popconfirm
+						:title="$t('Do you really want to leave?')"
+						:ok-text="$t('Yes')"
+						:cancel-text="$t('No')"
+						@confirm="logout"
+					>
+						<a-button type="danger">{{$t('logout')}}</a-button>
+					</a-popconfirm>
+				</a-col>
+			</a-row>
+		</div>
 	</div>
 </template>
 
@@ -102,6 +104,8 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import {mapGetters} from 'vuex'
+import config from '@/config.js'
+
 export default {
 	name: "AuthPage_logined",
 	data(){
@@ -113,6 +117,14 @@ export default {
 		}
 	},
 	methods: {
+		userCyrillic(text){
+			const regex = /[A-Z]/i;
+			while(text.match(regex)){
+				const found = text.match(regex)[0];
+				text = text.replace(found, config.enToRu[found]);
+			}
+			return text;
+		},
 		test(e){
 			console.log(e);
 		},
@@ -177,5 +189,9 @@ export default {
 <style>
 .logined{
 	padding: 10px;
+}
+
+.settings__fields{
+	max-width: 700px;
 }
 </style>

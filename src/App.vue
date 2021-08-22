@@ -56,15 +56,22 @@
         </a-menu-item>
         <a-menu-item key="Auth">
 					<router-link to="/auth">
-						<a-icon type="user" />
-						<span>{{$t('Auth')}}</span>
+						<a-icon v-if="isUserLoading" type="loading" />
+						<a-icon v-else type="user" />
+						<span>{{$t('profile') | capitalize}}</span>
 					</router-link>
         </a-menu-item>
-        <a-menu-item v-if="user.isDrive" key="Google drive">
+        <!-- <a-menu-item v-if="user.isDrive" key="Google drive">
 					<a :href="user.drive">
 						<a-icon type="cloud-download" />
 						<span>{{$t('Google drive')}}</span>
 					</a>
+        </a-menu-item> -->
+        <a-menu-item v-if="!user.isUserLoading" key="Links">
+					<router-link to="/links">
+						<a-icon type="link" />
+						<span>{{$t('link') | capitalize}}</span>
+					</router-link>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -157,15 +164,15 @@ export default {
 		this.$router.onReady(() => {
 			this.current[0] = this.$router.currentRoute.name;
     });
-		this.$store.dispatch("loadAll");
-		this.$store.dispatch("updateTime")
+		this.$store.dispatch('loadAll');
+		this.$store.dispatch('updateTime')
 		this.$router.beforeEach((to, from, next) => {
 			this.current[0] = to.name;
 			next();
 		})
 	},
 	computed: {
-		...mapGetters(['getWeekNum', 'getWeek', 'user']),
+		...mapGetters(['getWeekNum', 'getWeek', 'user', 'isUserLoading']),
 		...mapGetters('app', ['isNeedReloadToBeUpdated']),
 		visiblePopup(){
 			return this.collapsed && this.visible;

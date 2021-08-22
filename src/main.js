@@ -26,8 +26,20 @@ firebase.initializeApp({
 	measurementId: "G-7BQXZ95QYH"
 });
 
+if(localStorage.getItem('userinfo') != null){
+	const infoFromLocalStore = localStorage.getItem('userinfo');
+	try {
+		const obj = JSON.parse(infoFromLocalStore);
+		store.commit("SET_USERINFO", obj);
+	} catch (error) {
+		console.log('can\'t load userinfo from local store with info');
+		console.error(error);
+	}
+}
+
 firebase.auth().onAuthStateChanged(user => {
 	store.dispatch("fetchUser", user);
+	store.commit("setUserLoading", false);
 	const savedUser = store.getters.user.data;
 	if(savedUser != null){
 		const userDB = firebase.database().ref('users/' + savedUser.uid);

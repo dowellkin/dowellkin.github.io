@@ -21,9 +21,22 @@ Vue.use(VueRouter)
 		component: () => import('../views/teachers.vue')
 	},
 	{
+		path: '/links',
+		name: 'Links',
+		component: () => import('../views/links.vue')
+	},
+	{
 		path: '/lessons',
 		name: 'Lessons',
 		component: () => import('../views/lessons.vue')
+	},
+	{
+		path: '/:group',
+		name: 'groupSchedule',
+		component: schedule,
+		meta: {
+			specialGroup: true
+		}
 	},
 	{
 		path: '/*',

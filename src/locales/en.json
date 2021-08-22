@@ -60,6 +60,11 @@
 	"type": "type",
 	"weeks": "weeks",
 
+	"profile": "profile",
+	"link": "link",
+
+	"no info": "no info",
+
 	"Name must be longer than 5 letters": "Name must be longer than 5 letters",
 	"Log into your profile for more options": "Log into your profile for more options",
 	"You are welcome": "You are welcome",

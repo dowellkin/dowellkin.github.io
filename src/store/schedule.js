@@ -16,6 +16,7 @@ export default {
 			ctx.commit('saveSchedule', ans.val()[group]);
 			localStorage.setItem("schedule", JSON.stringify(ans.val()[group]));
 		},
+
 		async loadOptions(ctx) {
 			function pushData(data){
 				ctx.commit('saveColors', data.colors);
@@ -35,7 +36,8 @@ export default {
 			pushData(ans.val());
 			localStorage.setItem("options", JSON.stringify(ans.val()));
 		},
-		async loadAll(ctx, group = defaultGroupname) {
+
+		async loadAll(ctx) {
 			ctx.commit('makeIsLoading', true);
 			if (localStorage.getItem('schedule') != null && localStorage.getItem('schedule') != 'undefined' && localStorage.getItem('options') != null) {
 				ctx.commit('saveSchedule', JSON.parse(localStorage.getItem('schedule')));
@@ -49,7 +51,6 @@ export default {
 				ctx.commit('saveRings', data.rings);
 				ctx.commit('saveTeachers', data.teachers);
 			}
-			await ctx.dispatch("loadSchedule", group);
 			await ctx.dispatch("loadOptions");
 			ctx.commit('makeIsLoading', false);
 		}
@@ -115,7 +116,7 @@ export default {
 						ct.raw.rawIndex = curTask;
 						ct.path = path;
 						const pair = ct;
-						console.log(ct);
+						// console.log(ct);
 						if (ct.custom || !ct.weeks.includes(getters.getWeek)) {
 							continue;
 						} else {
@@ -127,7 +128,7 @@ export default {
 								pair.teacher = state.teachers[pair.teacherId];
 							
 							if(pair.half == "1" || pair.half == undefined){
-								console.log(pair.lessonNumber);
+								// console.log(pair.lessonNumber);
 								pair.startTime = state.rings[pair.lessonNumber][0][0];
 								pair.endTime = state.rings[pair.lessonNumber][0][1];
 								dayArr.push(pair);

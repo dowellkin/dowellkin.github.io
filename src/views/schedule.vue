@@ -56,8 +56,31 @@ export default {
 			this.modal.lessonsConfigure = true
 		}
 	},
+	created() {
+		const update = (newRoute = null) => {
+			const route = newRoute ?? this.$route;
+			if(route.meta.specialGroup){
+				const groupname = route.params.group;
+				this.$store.dispatch('loadSchedule', groupname);
+			} else {
+				const userGroup = this.user.userinfo?.group;
+				if(userGroup){
+					this.$store.dispatch('loadSchedule', userGroup);
+				} else {
+					this.$store.dispatch('loadSchedule');
+				}
+			}
+		} 
+
+		update();
+		this.$router.beforeEach((to, from, next) => {
+			console.log(to)
+			update(to);
+			next();
+		})
+	},
 	computed: {
-		...mapGetters(['fullScheldue', 'isLoading', 'user', 'isConfigMode']),
+		...mapGetters(['fullScheldue', 'isLoading', 'user', 'isConfigMode', 'groups']),
 		...mapGetters('edit', ['isShowfield'])
 	}
 }

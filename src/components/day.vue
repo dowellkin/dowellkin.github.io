@@ -27,51 +27,67 @@
 						<div
 							v-for="(task, index) in day"
 							:key="task.lessonNumber + '' + index" class="day__task task"
+							:class="getClassesFromTask(task)"
 							:style="{
 								'top': `${getTopBias(task)}px`,
 								'height': `${getTaskHight(task)}px`,
 								'background-color': getBackgroundColor(task),
 								'border': `1px solid ${getBorderColor(task)}`
 							}">
-							<a-popover :title="'пол пары (45 мин.)'">
+
+							<a-popover :title="'Академический час ' + `(${task.startTime}-${task.endTime})`">
+
 								<template slot="content">
-									<div>
-										{{isHaveLessonId(task) ? getLessons[task.lessonId].title : task.name}} {{task.type.match(/ЛК|ПЗ/i) ? ` (${task.type.toUpperCase()})` : ""}}
+									<div class="popup__container">
+										<div class="popup__row">
+											{{isHaveLessonId(task) ? getLessons[task.lessonId].title : task.name}}
+											{{task.type ? ` (${task.type.toUpperCase()})` : ""}}
+										</div>
+
+										<div class="popup__row popup__teacher">
+											{{$t('type') | capitalize}}: {{getFullType(task.type) || $t('no info')}}
+										</div>
+
+										<div class="popup__row popup__teacher">
+											{{$t('teacher') | capitalize}}: {{task.teacher || $t('no info')}}
+										</div>
+
+										<div class="popup__row popup__room">
+											{{$t('room') | capitalize}}: {{task.room || $t('no info')}}
+										</div>
+
+										<a-row v-if="isConfigMode" type="flex" :gutter="[15, 0]">
+											<a-col>
+												<div class="link link__open-lesson" @click="handleButttonEdit(task)">
+													{{$t("edit") | capitalize}}
+												</div>
+											</a-col>
+										</a-row>
+										<a-row type="flex" :gutter="[15, 0]">
+											<a-col>
+												<div class="link link__open-lesson" @click="handleButtonDetails(task)">
+													{{$t("details") | capitalize}}
+												</div>
+											</a-col>
+										</a-row>
 									</div>
-									<div class="popup__teacher">
-										{{task.teacher.name}}
-									</div>
-									<div class="popup__room" v-if="task.room">
-										{{$t('room') | capitalize}}: {{task.room}}
-									</div>
-									<a-row v-if="isConfigMode" type="flex" :gutter="[15, 0]">
-										<a-col>
-											<div class="link link__open-lesson" @click="handleButttonEdit(task)">
-												{{$t("edit") | capitalize}}
-											</div>
-										</a-col>
-									</a-row>
-									<a-row type="flex" :gutter="[15, 0]">
-										<a-col>
-											<div class="link link__open-lesson" @click="handleButtonDetails(task)">
-												{{$t("details") | capitalize}}
-											</div>
-										</a-col>
-									</a-row>
 								</template>
+
 								<div class="task__content">
 									<div class="pair__info">
-										<span class="task__time">({{task.startTime}}-{{task.endTime}})</span>
+										<span v-if="!isSubgroup(task)" class="task__time">({{task.startTime}}-{{task.endTime}})</span>
 										{{lessonTitle(task)}}
-										<span class="group" v-if="task.group && !showMySub">
+										<!-- <span class="group" v-if="task.group && !showMySub">
 											{{task.group == 3 ? "1, 2" : task.group}}г.
-										</span>
+										</span> -->
 									</div>
 									<div class="pair__cabinet">
 										{{task.room}}
 									</div>
 								</div>
+
 							</a-popover>
+
 						</div>
 						</transition-group>
 					</div>
@@ -83,6 +99,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import options from '@/config.js'
+
 export default {
 	name: 'day',
 	props: ['day', 'index'],
@@ -106,9 +124,31 @@ export default {
 		getBias(){
 			return this.calculateBias(this.getEncodedTime)
 		},
-		...mapGetters(["getTime", "getDay", "getEncodedTime", "getHours", "getDays", "showMySub", "isConfigMode", "getLessons"])
+		...mapGetters(["getTime", "getDay", "getEncodedTime", "getHours", "getDays", "showMySub", "isConfigMode", "getLessons", "user"])
 	},
 	methods: {
+		getFullType(name){
+			return options.types[name]
+		},
+		getClassesFromTask(task){
+			const classes = [];
+			if(this.isSubgroup(task)){
+				classes.push('task--subgroup');
+				if(task.group == 1){
+					classes.push('task--subgroup-first');
+				} else if(task.group == 2){
+					classes.push('task--subgroup-second');
+				}
+			}
+			return classes
+		},
+		isSubgroup(task){
+			if(this.user.userinfo){
+				return !!task.group && this.user.userinfo.showMySub != true;
+			} else {
+				return !!task.group
+			}
+		},
 		isHaveLessonId(task){
 			return task.lessonId && task.lessonId != -1
 		},
@@ -326,9 +366,31 @@ export default {
 	transform: translateX(-50%) scale(1.02);
 }
 
+.task--subgroup{
+	width: calc(50% - 2px);
+	transform: none;
+}
+
+.task--subgroup:hover{
+	transform: scale(1.02);
+}
+
+.task--subgroup-first{
+	left: 0;
+}
+
+.task--subgroup-second{
+	left: auto;
+	right: 0;
+}
+
 .task__time{
 	font-size: .6rem;
 	font-weight: bold;
+}
+
+.task__time--big{
+	font-size: .8rem;
 }
 
 .day__tasks{
@@ -365,5 +427,13 @@ export default {
 .pair__info{
 	text-overflow: ellipsis;
 	overflow: hidden;
+}
+
+.popup__row{
+	margin-bottom: 5px;
+}
+
+.popup__container{
+	max-width: 350px;
 }
 </style>

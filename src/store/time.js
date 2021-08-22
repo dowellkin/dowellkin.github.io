@@ -2,9 +2,11 @@ export default {
 	actions: {
 		updateTime(ctx){
 			ctx.commit("newDate", new Date());
+			console.log(process.env);
+			const updateTime = process.env.NODE_ENV == "development" ? 200000 : 10000;
 			setTimeout(() => {
 				ctx.dispatch("updateTime")
-			}, 200000) // починить
+			}, updateTime)
 		}
 	},
 

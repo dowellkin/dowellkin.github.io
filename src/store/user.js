@@ -4,12 +4,11 @@ export default {
 	state: {
 			user: {
 				loggedIn: false,
-				isDrive: false,
 				data: null,
 				permissions: null,
 				userinfo: null,
-				drive: null,
 			},
+			userLoading: true,
 			groups: null,
 			isConfigure: false
 		},
@@ -47,6 +46,9 @@ export default {
 			isConfigMode(state){
 				return state.isConfigure
 			},
+			isUserLoading(state){
+				return state.userLoading;
+			}
 		},
 		mutations: {
 			SET_LOGGED_IN(state, value) {
@@ -58,14 +60,9 @@ export default {
 			SET_GROUPS(state, data) {
 				state.groups = data;
 			},
-			SET_DRIVE(state, data) {
-				state.user.drive = data;
-			},
-			SET_ISDRIVE(state, data) {
-				state.user.isDrive = data;
-			},
 			SET_USERINFO(state, data) {
 				state.user.userinfo = data;
+				localStorage.setItem('userinfo', JSON.stringify(data));
 			},
 			SET_USERGROUP(state, data) {
 				state.user.userinfo.group = data;
@@ -81,6 +78,9 @@ export default {
 			},
 			setIsConfigure(state, data) {
 				return state.isConfigure = data;
+			},
+			setUserLoading(state, data) {
+				return state.userLoading = data;
 			},
 		},
 		actions: {
@@ -103,15 +103,15 @@ export default {
 				groupRef.once("value")
 					.then(groups => {
 						if (groups.val() != undefined) {
-							ctx.commit("SET_GROUPS", groups.val());
-							const driveRef = db.ref('drive/' + ctx.state.user.userinfo.group);
-							driveRef.once("value")
-								.then(drive => {
-									if (drive.val() != undefined) {
-										ctx.commit("SET_DRIVE", drive.val());
-										ctx.commit("SET_ISDRIVE", true);
-									}
-								})
+							ctx.commit("SET_GROUPS", groups.val().filter(el => !!el));
+							// const driveRef = db.ref('drive/' + ctx.state.user.userinfo.group);
+							// driveRef.once("value")
+							// 	.then(drive => {
+							// 		if (drive.val() != undefined) {
+							// 			ctx.commit("SET_DRIVE", drive.val());
+							// 			ctx.commit("SET_ISDRIVE", true);
+							// 		}
+							// 	})
 						}
 					})
 			}
