@@ -125,7 +125,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 .actions{
 	display: flex;
