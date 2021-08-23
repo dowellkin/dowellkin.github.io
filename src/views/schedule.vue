@@ -28,7 +28,7 @@
 			<a-result
 				status="404"
 				title="404"
-				sub-title="Sorry, the group you visited does not exist."
+				:sub-title="$t('Sorry, the group you visited does not exist.')"
 			>
 				<template #extra>
 					

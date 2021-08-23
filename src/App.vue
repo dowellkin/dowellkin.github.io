@@ -134,12 +134,16 @@ export default {
 			}
 			console.log('worker', worker);
 			if(worker != undefined){
+				console.log('send');
 				worker.active.postMessage({ type: 'SKIP_WAITING'});
+			} else {
+				console.log('idk how, but not:', worker);
 			}
 			this.hideNotification();
-			location.reload();
-			// console.log('there is must be reload but i commeted it');
+			// location.reload();
+			console.log('there is must be reload but i commeted it 111');
 		},
+		
 		hideNotification(){
 			this.$store.commit('app/setUpdate', {worker: this.isNeedReloadToBeUpdated.worker, status: false})
 		},
