@@ -60,7 +60,6 @@ firebase.auth().onAuthStateChanged(user => {
 				store.dispatch("fetchParams");
 			})
 	} else {
-		store.commit("SET_ISDRIVE", false);
 		store.commit("SET_PERMISSIONS", "user");
 		store.commit("SET_USERINFO", {
 			group: "-1",

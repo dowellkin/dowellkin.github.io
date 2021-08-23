@@ -5,16 +5,20 @@ const defaultGroupname = 'it041';
 export default {
 	actions: {
 		async loadSchedule(ctx, group = defaultGroupname) {
+			if(group == -1){
+				group = defaultGroupname
+			}
 			const db = firebase.database()
 			// ctx.commit('makeIsLoading', true);
-			const ref = db.ref('/schedule')
+			const ref = db.ref('/schedule').child(group)
 			const ans = await ref.once("value")
+
 			ref.on('value', (snapshot) => {
-				ctx.commit('saveSchedule', snapshot.val()[group]);
-				localStorage.setItem("schedule", JSON.stringify(snapshot.val()[group]));
+				ctx.commit('saveSchedule', snapshot.val());
+				localStorage.setItem("schedule", JSON.stringify(snapshot.val()));
 			})
-			ctx.commit('saveSchedule', ans.val()[group]);
-			localStorage.setItem("schedule", JSON.stringify(ans.val()[group]));
+			ctx.commit('saveSchedule', ans.val());
+			localStorage.setItem("schedule", JSON.stringify(ans.val()));
 		},
 
 		async loadOptions(ctx) {
