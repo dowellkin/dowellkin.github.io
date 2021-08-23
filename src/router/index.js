@@ -11,6 +11,20 @@ Vue.use(VueRouter)
 		component: schedule
 	},
 	{
+		path: '/g/:group',
+		name: 'groupSchedule',
+		component: schedule,
+		meta: {
+			specialGroup: true
+		}
+	},
+	{
+		path: '/g',
+		redirect: {
+			name: 'Schedule'
+		}
+	},
+	{
 		path: '/auth',
 		name: 'Auth',
 		component: () => import('../views/auth.vue')
@@ -31,14 +45,6 @@ Vue.use(VueRouter)
 		component: () => import('../views/lessons.vue')
 	},
 	{
-		path: '/:group',
-		name: 'groupSchedule',
-		component: schedule,
-		meta: {
-			specialGroup: true
-		}
-	},
-	{
 		path: '/*',
 		redirect: {
 			name: 'Schedule'
@@ -48,6 +54,7 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
 	mode: 'history',
+  base: process.env.BASE_URL,
 	routes
 })
 

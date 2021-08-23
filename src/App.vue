@@ -166,12 +166,12 @@ export default {
 	},
 	created(){
 		this.$router.onReady(() => {
-			this.current[0] = this.$router.currentRoute.name;
+			this.current[0] = this.$router.currentRoute.meta?.breadcrumbName || this.$router.currentRoute.name;
     });
 		this.$store.dispatch('loadAll');
 		this.$store.dispatch('updateTime')
 		this.$router.beforeEach((to, from, next) => {
-			this.current[0] = to.name;
+			this.current[0] = to.meta?.breadcrumbName || to.name;
 			next();
 		})
 	},
