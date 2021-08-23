@@ -7,9 +7,9 @@
 			</div>
 		</div>
 
-		<div class="actions">
+		<div v-if="user.permissions == 'admin' && isConfigMode" class="actions">
 
-			<div v-if="user.permissions == 'admin' && isConfigMode || true" class="links-action links-add">
+			<div v-if="user.permissions == 'admin' && isConfigMode" class="links-action links-add">
 				<header class="links-action__header">
 					<h3>Add link</h3>
 				</header>
@@ -33,7 +33,7 @@
 				</main>
 			</div>
 
-			<div v-if="user.permissions == 'admin' && isConfigMode || true" class="links-action links-remove">
+			<div v-if="user.permissions == 'admin' && isConfigMode" class="links-action links-remove">
 				<header class="links-action__header">
 					<h3>Remove link</h3>
 				</header>
