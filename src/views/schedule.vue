@@ -74,7 +74,6 @@ export default {
 
 		update();
 		this.$router.beforeEach((to, from, next) => {
-			console.log(to)
 			update(to);
 			next();
 		})

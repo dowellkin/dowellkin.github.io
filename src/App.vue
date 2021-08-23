@@ -78,7 +78,7 @@
     <a-layout>
       <a-layout-content style="margin: 0 16px">
         <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item>{{$t(current[0]) | capitalize}}</a-breadcrumb-item>
+          <a-breadcrumb-item>{{breakcrubsText(current[0]) | capitalize}}</a-breadcrumb-item>
         </a-breadcrumb>
         <div class="mainView">
 					<router-view />
@@ -93,6 +93,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import config from '@/config.js'
 
 export default {
 	name: 'app',
@@ -116,6 +117,13 @@ export default {
 			}
 		},
 
+		breakcrubsText(str){
+			if(str.match(/^[a-z]{2}\d{3}$/m)){
+				return config.enToRu(str);
+			} else {
+				return this.$t(str);
+			}
+		},
 		
 		skipWaiting(){
 			let worker = this.needToBeUpdated.worker;
@@ -166,12 +174,21 @@ export default {
 	},
 	created(){
 		this.$router.onReady(() => {
-			this.current[0] = this.$router.currentRoute.meta?.breadcrumbName || this.$router.currentRoute.name;
+			if(this.$router.currentRoute.name == 'groupSchedule'){
+				this.current[0] = this.$router.currentRoute.params.group.toUpperCase()
+			} else {
+				this.current[0] = this.$router.currentRoute.meta?.breadcrumbName || this.$router.currentRoute.name;
+			}
     });
 		this.$store.dispatch('loadAll');
 		this.$store.dispatch('updateTime')
 		this.$router.beforeEach((to, from, next) => {
-			this.current[0] = to.meta?.breadcrumbName || to.name;
+			if(to.name == 'groupSchedule'){
+				this.current[0] = to.params.group.toUpperCase()
+			} else {
+				this.current[0] = to.meta?.breadcrumbName || to.name;
+			}
+			// this.current[0] = to.meta?.breadcrumbName || to.name;
 			next();
 		})
 	},

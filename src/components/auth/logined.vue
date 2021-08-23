@@ -120,12 +120,7 @@ export default {
 	},
 	methods: {
 		userCyrillic(text){
-			const regex = /[A-Z]/i;
-			while(text.match(regex)){
-				const found = text.match(regex)[0];
-				text = text.replace(found, config.enToRu[found]);
-			}
-			return text;
+			return config.enToRu(text)
 		},
 		test(e){
 			console.log(e);
