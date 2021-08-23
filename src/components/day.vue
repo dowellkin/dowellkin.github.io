@@ -49,11 +49,11 @@
 										</div>
 
 										<div class="popup__row popup__teacher">
-											{{$t('teacher') | capitalize}}: {{task.teacher || $t('no info')}}
+											{{$t('teacher') | capitalize}}: <b>{{getTeacherName(task) || $t('no info')}}</b>
 										</div>
 
 										<div class="popup__row popup__room">
-											{{$t('room') | capitalize}}: {{task.room || $t('no info')}}
+											{{$t('room') | capitalize}}: <b>{{task.room || $t('no info')}}</b>
 										</div>
 
 										<a-row v-if="isConfigMode" type="flex" :gutter="[15, 0]">
@@ -127,6 +127,9 @@ export default {
 		...mapGetters(["getTime", "getDay", "getEncodedTime", "getHours", "getDays", "showMySub", "isConfigMode", "getLessons", "user"])
 	},
 	methods: {
+		getTeacherName(task){
+			return task.teacher?.name || task.teacher || undefined
+		},
 		getFullType(name){
 			return options.types[name]
 		},
