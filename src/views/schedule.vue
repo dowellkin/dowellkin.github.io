@@ -1,27 +1,46 @@
 <template>
 	<div class="schedule-wrapper">
-		<div class="admin__buttons" v-if="user.permissions == 'admin'" style="margin-bottom: 20px">
-			<a-button-group v-if="isConfigMode">
-				<a-button icon="plus" type="primary" @click="() => $store.commit('edit/showEdit')">
-					{{$t('Добавить занятие')}}
-				</a-button>
-			</a-button-group>
-			<a-modal
-				:title="$t('Lesson config')"
-				:visible="isShowfield"
-				@ok="() => $store.commit('edit/closeEdit')"
-				@cancel="() => $store.commit('edit/closeEdit')"
-				:footer="null"
-			>
-				<lesson-configure @done="() => $store.commit('edit/closeEdit')"/>
-			</a-modal>
-		</div>
-		<transition name="loadingAnim">
-			<loading v-if="isLoading"></loading>
-			<div v-else class="schedule">
-				<day v-for="(day, index) in fullScheldue" :key="index" :day='day' :index='index' @configlesson="handleDayConfigLesson"/>
+		<template v-if="fullScheldue != null">
+			<div class="admin__buttons" v-if="user.permissions == 'admin'" style="margin-bottom: 20px">
+				<a-button-group v-if="isConfigMode">
+					<a-button icon="plus" type="primary" @click="() => $store.commit('edit/showEdit')">
+						{{$t('Добавить занятие')}}
+					</a-button>
+				</a-button-group>
+				<a-modal
+					:title="$t('Lesson config')"
+					:visible="isShowfield"
+					@ok="() => $store.commit('edit/closeEdit')"
+					@cancel="() => $store.commit('edit/closeEdit')"
+					:footer="null"
+				>
+					<lesson-configure @done="() => $store.commit('edit/closeEdit')"/>
+				</a-modal>
 			</div>
-		</transition>
+			<transition name="loadingAnim">
+				<loading v-if="isLoading"></loading>
+				<div v-else class="schedule">
+					<day v-for="(day, index) in fullScheldue" :key="index" :day='day' :index='index' @configlesson="handleDayConfigLesson"/>
+				</div>
+			</transition>
+		</template>
+		<template v-else>
+			<a-result
+				status="404"
+				title="404"
+				sub-title="Sorry, the group you visited does not exist."
+			>
+				<template #extra>
+					
+					<router-link to="/">
+						<a-button type="primary">
+							{{$t('Back to Schedule')}}
+						</a-button>
+					</router-link>
+				</template>
+
+			</a-result>
+		</template>
 	</div>
 </template>
 

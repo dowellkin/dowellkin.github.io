@@ -13,12 +13,16 @@ export default {
 			const ref = db.ref('/schedule').child(group)
 			const ans = await ref.once("value")
 
+			const result = ans.val();
+
 			ref.on('value', (snapshot) => {
 				ctx.commit('saveSchedule', snapshot.val());
 				localStorage.setItem("schedule", JSON.stringify(snapshot.val()));
 			})
-			ctx.commit('saveSchedule', ans.val());
-			localStorage.setItem("schedule", JSON.stringify(ans.val()));
+			ctx.commit('saveSchedule', result);
+			if(result){
+				localStorage.setItem("schedule", JSON.stringify(result));
+			}
 		},
 
 		async loadOptions(ctx) {
@@ -124,6 +128,7 @@ export default {
 	getters: {
 		fullScheldue(state, getters){
 			const schedule = state.mainSchedule;
+			if(!schedule) return null
 			const sch = [];
 			let path = [];
 			for(let day = 0; day < schedule.length; day++){
