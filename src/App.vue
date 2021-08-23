@@ -119,6 +119,10 @@ export default {
 		
 		skipWaiting(){
 			let worker = this.needToBeUpdated.worker;
+			if(!worker){
+				this.$message.error('can\'t get worker. Keep 1 tab of app and reload few times...');
+				return;
+			}
 			console.log('worker', worker);
 			if(worker != undefined){
 				worker.active.postMessage({ type: 'SKIP_WAITING'});
