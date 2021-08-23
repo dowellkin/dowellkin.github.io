@@ -126,6 +126,7 @@ export default {
 		},
 		
 		skipWaiting(){
+			console.log(this.isNeedReloadToBeUpdated);
 			let worker = this.isNeedReloadToBeUpdated.worker;
 			if(!worker){
 				this.$message.error('can\'t get worker. Keep 1 tab of app and reload few times...');
