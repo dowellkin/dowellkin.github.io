@@ -126,7 +126,7 @@ export default {
 		},
 		
 		skipWaiting(){
-			let worker = this.needToBeUpdated.worker;
+			let worker = this.isNeedReloadToBeUpdated.worker;
 			if(!worker){
 				this.$message.error('can\'t get worker. Keep 1 tab of app and reload few times...');
 				return;
@@ -140,7 +140,7 @@ export default {
 			// console.log('there is must be reload but i commeted it');
 		},
 		hideNotification(){
-			this.$store.commit('app/setUpdate', {worker: this.needToBeUpdated.worker, status: false})
+			this.$store.commit('app/setUpdate', {worker: this.isNeedReloadToBeUpdated.worker, status: false})
 		},
 
 		openNotification() {
@@ -201,7 +201,7 @@ export default {
 	},
 	watch: {
 		isNeedReloadToBeUpdated(needToReload){
-			if(needToReload){
+			if(needToReload.status){
 				this.openNotification();
 			}
 		}
