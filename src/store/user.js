@@ -48,21 +48,35 @@ export default {
 			},
 			isUserLoading(state){
 				return state.userLoading;
+			},
+			newUserDefaultValues(state, getters){
+				const data = {
+					permissions: 'user',
+					subgroup: 1,
+					showMySub: true,
+					group: getters.groups[0]
+				}
+				return data;
 			}
 		},
 		mutations: {
+			SET_FULL_USER(state, data){
+				state.user = data;
+				localStorage.setItem('user', JSON.stringify(data));
+			},
 			SET_LOGGED_IN(state, value) {
 				state.user.loggedIn = value;
 			},
 			SET_USER(state, data) {
 				state.user.data = data;
+				localStorage.setItem('user', JSON.stringify(state.user));
 			},
 			SET_GROUPS(state, data) {
 				state.groups = data;
 			},
 			SET_USERINFO(state, data) {
 				state.user.userinfo = data;
-				localStorage.setItem('userinfo', JSON.stringify(data));
+				localStorage.setItem('user', JSON.stringify(state.user));
 			},
 			SET_USERGROUP(state, data) {
 				state.user.userinfo.group = data;

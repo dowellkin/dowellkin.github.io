@@ -26,11 +26,13 @@ firebase.initializeApp({
 	measurementId: "G-7BQXZ95QYH"
 });
 
-if(localStorage.getItem('userinfo') != null){
-	const infoFromLocalStore = localStorage.getItem('userinfo');
+if(localStorage.getItem('user') != null){
+	const infoFromLocalStore = localStorage.getItem('user');
 	try {
+		console.log('test');
 		const obj = JSON.parse(infoFromLocalStore);
-		store.commit("SET_USERINFO", obj);
+		store.commit("SET_USER", obj);
+		store.commit("setUserLoading", false);
 	} catch (error) {
 		console.log('can\'t load userinfo from local store with info');
 		console.error(error);
@@ -51,7 +53,9 @@ firebase.auth().onAuthStateChanged(user => {
 					store.dispatch("fetchParams");
 				} else {
 					// firebase.database().ref('users/' + savedUser.uid + "/permissions").set("user")
-					userDB.child("permissions").set("user");
+					// userDB.child("permissions").set("user");
+					// userDB.child("subgroup").set("1");
+					userDB.set(store.getters.newUserDefaultValues)
 				}
 			});
 		userDB.on('value', snap => {
