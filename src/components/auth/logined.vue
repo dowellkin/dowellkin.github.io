@@ -98,7 +98,6 @@
 			</a-row>
 		</div>
 
-		<a-button @click='()=> $router.push({name: "groupSchedule", params: {group: "ms091"}})'>goto</a-button>
 	</div>
 </template>
 
