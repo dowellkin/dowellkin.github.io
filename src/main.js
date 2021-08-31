@@ -31,7 +31,7 @@ if(localStorage.getItem('user') != null){
 	try {
 		console.log('test');
 		const obj = JSON.parse(infoFromLocalStore);
-		store.commit("SET_USER", obj);
+		store.commit("SET_FULL_USER", obj);
 		store.commit("setUserLoading", false);
 	} catch (error) {
 		console.log('can\'t load userinfo from local store with info');
