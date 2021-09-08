@@ -1,7 +1,7 @@
 <template>
 	<div class="schedule-wrapper">
 		<template v-if="fullScheldue != null">
-			<div class="admin__buttons" v-if="user.permissions == 'admin'" style="margin-bottom: 20px">
+			<div class="admin__buttons" v-if="user.permissions == 'admin' || userinfo.headman == getCurrentGroup" style="margin-bottom: 20px">
 				<a-button-group v-if="isConfigMode">
 					<a-button icon="plus" type="primary" @click="() => $store.commit('edit/showEdit')">
 						{{$t('Добавить занятие')}}
@@ -98,7 +98,7 @@ export default {
 		})
 	},
 	computed: {
-		...mapGetters(['fullScheldue', 'isLoading', 'user', 'isConfigMode', 'groups']),
+		...mapGetters(['fullScheldue', 'isLoading', 'user', 'isConfigMode', 'groups', 'userinfo', 'getCurrentGroup']),
 		...mapGetters('edit', ['isShowfield'])
 	}
 }

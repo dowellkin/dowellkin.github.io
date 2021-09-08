@@ -18,6 +18,7 @@
 
 		<div class="settings__fields">
 			<template v-if="userinfo != undefined && groups != undefined">
+				<h3>Вы - староста группы {{userCyrillic(userinfo.headman.toUpperCase())}}</h3>
 				<a-row type="flex" justify="space-around" style="margin-top: 15px" :gutter="[10, 20]">
 					<a-col :span="24">
 						<p>
@@ -56,7 +57,7 @@
 							</a-col>
 						</a-row>
 					</a-col>
-					<a-col v-if="user.permissions == 'admin'" :span="24">
+					<a-col v-if="user.permissions == 'admin' || userinfo.headman" :span="24">
 						<a-row type="flex" justify="space-between">
 							<a-col>
 								{{$t('pair configuration mode') | capitalize}}

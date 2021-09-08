@@ -5,7 +5,7 @@
 				{{$t('lesson') | capitalize}}: 
 			</a-col>
 			<a-col span=18>
-				<a-select :disabled="user.permissions != 'admin' || isDisableAll" :value="getField('lessonId')" @change="(value) => setField('lessonId', value)" style="width: 100%">
+				<a-select :disabled="(user.permissions != 'admin' &&  userinfo.headman != getCurrentGroup) || isDisableAll" :value="getField('lessonId')" @change="(value) => setField('lessonId', value)" style="width: 100%">
 					<a-select-option v-for="(lesson, index) in getLessons" :key="lesson.title || lesson" :value="index">
 						{{lesson.title || lesson}}
 					</a-select-option>
@@ -18,7 +18,7 @@
 				{{$t('teacher') | capitalize}}: 
 			</a-col>
 			<a-col span=18>
-				<a-select :disabled="user.permissions != 'admin' || isDisableAll" :value="getField('teacherId')" @change="(value) => setField('teacherId', value)" style="width: 100%">
+				<a-select :disabled="(user.permissions != 'admin' &&  userinfo.headman != getCurrentGroup) || isDisableAll" :value="getField('teacherId')" @change="(value) => setField('teacherId', value)" style="width: 100%">
 					<a-select-option v-for="teacher in sortedTeachers" :key="teacher.id" :value="teacher.id">
 						{{teacher.name}}
 					</a-select-option>
@@ -31,7 +31,7 @@
 				{{$t('day of week') | capitalize}}: 
 			</a-col>
 			<a-col span=18>
-				<a-select :disabled="user.permissions != 'admin' || isDisableAll" :value="getField('day').toString()" @change="(value) => setField('day', +value)" style="width: 100%">
+				<a-select :disabled="(user.permissions != 'admin' &&  userinfo.headman != getCurrentGroup) || isDisableAll" :value="getField('day').toString()" @change="(value) => setField('day', +value)" style="width: 100%">
 					<a-select-option v-for="t_day in Object.entries(getDays)" :key="t_day[0]" :value="t_day[0]">
 						{{$t(t_day[1])}}
 					</a-select-option>
@@ -47,7 +47,7 @@
 						{{$t('number') | capitalize}}:
 					</a-col>
 					<a-col span=14>
-						<a-select :disabled="user.permissions != 'admin' || isDisableAll" :value="getField('lessonNumber')" @change="(value) => setField('lessonNumber', value)" style="width: 100%">
+						<a-select :disabled="(user.permissions != 'admin' &&  userinfo.headman != getCurrentGroup) || isDisableAll" :value="getField('lessonNumber')" @change="(value) => setField('lessonNumber', value)" style="width: 100%">
 							<a-select-option v-for="numb in numbers" :key="numb" :value="numb-1">{{numb}}</a-select-option>
 						</a-select>
 					</a-col>
@@ -60,7 +60,7 @@
 						{{$t('type') | capitalize}}:
 					</a-col>
 					<a-col span=14>
-						<a-select :disabled="user.permissions != 'admin' || isDisableAll" :value="getField('type')" @change="(value) => setField('type', value)" style="width: 100%">
+						<a-select :disabled="(user.permissions != 'admin' &&  userinfo.headman != getCurrentGroup) || isDisableAll" :value="getField('type')" @change="(value) => setField('type', value)" style="width: 100%">
 							<a-select-option v-for="type in types" :key="type" :value="type">{{type}}</a-select-option>
 						</a-select>
 					</a-col>
@@ -73,7 +73,7 @@
 						{{$t('room') | capitalize}}:
 					</a-col>
 					<a-col span=14>
-						<a-input :disabled="user.permissions != 'admin' || isDisableAll" :value="getField('room')" @change="(e) => setField('room', e.target.value)"></a-input>
+						<a-input :disabled="(user.permissions != 'admin' &&  userinfo.headman != getCurrentGroup) || isDisableAll" :value="getField('room')" @change="(e) => setField('room', e.target.value)"></a-input>
 					</a-col>
 				</a-row>	
 			</a-col>
@@ -87,14 +87,14 @@
 			<a-col span=18>
 				<a-row>
 					<a-col v-for="(week, index) in weeks" :key="week" :span="24 / weeks.length">
-						<a-checkbox :disabled="user.permissions != 'admin' || isDisableAll" :checked="checkBoxProxy(getField('weeks'))[index]" @change="(value) => $store.dispatch('edit/weeksEdit', {value, week: index+1})">{{week}}</a-checkbox>
+						<a-checkbox :disabled="(user.permissions != 'admin' &&  userinfo.headman != getCurrentGroup) || isDisableAll" :checked="checkBoxProxy(getField('weeks'))[index]" @change="(value) => $store.dispatch('edit/weeksEdit', {value, week: index+1})">{{week}}</a-checkbox>
 					</a-col>
 				</a-row>
 			</a-col>
 		</a-row>
 
 		<div class="footer">
-			<a-row v-if="!(user.permissions != 'admin' || isDisableAll)" type="flex" :gutter="[10, 0]" justify="end">
+			<a-row v-if="!((user.permissions != 'admin' &&  userinfo.headman != getCurrentGroup) || isDisableAll)" type="flex" :gutter="[10, 0]" justify="end">
 				<a-col v-if="getField('rawIndex')">
 					<a-popconfirm
 						title="Are you sure delete this task?"
@@ -129,7 +129,7 @@ for(let i = 1; i <= pairCount; i++){
 	numbers.push(i);
 }
 
-const types = ['ПЗ', 'ЛК', 'Ф', 'none']
+const types = ['ЛБ', 'ПЗ', 'ЛК', 'Ф', 'none']
 
 const weeks = [];
 const weeksChecked = [];
@@ -183,7 +183,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['user', 'getTeachers', 'getLessons', 'getDays']), 
+		...mapGetters(['user', 'getTeachers', 'getLessons', 'getDays', 'userinfo', 'getCurrentGroup']), 
 		...mapGetters('edit', ['getParams', 'getWeeks', 'isLoading', 'isEdit', 'isDisableAll']),
 		getField(){
 			return (name) => this.getParams[name];

@@ -9,7 +9,7 @@ export default {
 				group = defaultGroupname
 			}
 			const db = firebase.database()
-			// ctx.commit('makeIsLoading', true);
+			ctx.commit('setCurrentGroup', group);
 			const ref = db.ref('/schedule').child(group)
 			const ans = await ref.once("value")
 
@@ -88,7 +88,8 @@ export default {
 		rings: [],
 		teachers: [],
 		links: {},
-		isLoading: false
+		isLoading: false,
+		currentGroup: ''
 	},
 
 	mutations: {
@@ -122,7 +123,10 @@ export default {
 		},
 		makeIsLoading(state, data){
 			state.isLoading = data;
-		}
+		},
+		setCurrentGroup(state, data){
+			state.currentGroup = data;
+		},
 	},
 	
 	getters: {
@@ -195,6 +199,9 @@ export default {
 		},
 		getLinks(state) {
 			return state.links;
+		},
+		getCurrentGroup(state){
+			return state.currentGroup;
 		}
 	}
 }
