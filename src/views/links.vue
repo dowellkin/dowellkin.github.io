@@ -7,9 +7,9 @@
 			</div>
 		</div>
 
-		<div v-if="user.permissions == 'admin' && isConfigMode" class="actions">
+		<div v-if="(user.permissions == 'admin' || userinfo.headman == getCurrentGroup) && isConfigMode " class="actions">
 
-			<div v-if="user.permissions == 'admin' && isConfigMode" class="links-action links-add">
+			<div v-if="(user.permissions == 'admin' || userinfo.headman == getCurrentGroup) && isConfigMode " class="links-action links-add">
 				<header class="links-action__header">
 					<h3>Add link</h3>
 				</header>
@@ -33,7 +33,7 @@
 				</main>
 			</div>
 
-			<div v-if="user.permissions == 'admin' && isConfigMode" class="links-action links-remove">
+			<div v-if="(user.permissions == 'admin' || userinfo.headman == getCurrentGroup) && isConfigMode " class="links-action links-remove">
 				<header class="links-action__header">
 					<h3>Remove link</h3>
 				</header>
@@ -78,7 +78,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['user', 'getLinks', "isConfigMode"]),
+		...mapGetters(['user', 'getLinks', "isConfigMode", 'userinfo', 'getCurrentGroup']),
 	},
 	created(){
 		this.$store.dispatch('loadLinks');
@@ -112,7 +112,7 @@ export default {
 				this.$message.error(this.$t("Failed"));
 				return;
 			}
-			console.log('links/' + userGroup);
+			// console.log('links/' + userGroup);
 			firebase.database().ref('links/' + userGroup).child(this.linkRemove.title).set(null, (error) => {
 				if(error){
 					this.$message.error(this.$t("failed"));
