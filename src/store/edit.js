@@ -38,7 +38,8 @@ export default {
 			dayName: '',
 			day: 0,
 			name: '',
-			custom: false
+			custom: false,
+			half: 'no'
 		},
 		edit: false,
 		showfield: false,
@@ -79,7 +80,7 @@ export default {
 	},
 	actions: {
 		setParams(ctx, data){
-			console.log(data);
+			// console.log(data);
 			ctx.commit('setParams', data);
 
 			if(data.lessonId != undefined){
@@ -108,6 +109,10 @@ export default {
 			
 			data.name = ctx.rootGetters.getLessons[data.lessonId];
 			
+			if(![1,2].includes(+data.half)){
+				delete data.half;
+			}
+
 			if(day > 5){
 				throw `day must be less, now it's: ${day}`
 			}
@@ -154,7 +159,7 @@ function sendPair(path, index, data) {
 	if(index == undefined){
 		throw 'index is underfined. Can\'t push data.';
 	}
-	console.log('send');
+	// console.log('send');
 	return new Promise( (resolve, reject) => {
 		firebase.database().ref(path).update({
 			[index]: data
