@@ -140,7 +140,7 @@ export default {
 				console.log('idk how, but not:', worker);
 			}
 			this.hideNotification();
-			location.reload();
+			// location.reload();
 			console.log('there is must be reload but i commeted it 111');
 		},
 		
@@ -151,7 +151,7 @@ export default {
 		openNotification() {
 			const key = `open${Date.now()}`;
 			this.$notification.open({
-				message: 'new content is avaliable :)',
+				message: 'new content is avaliable',
 				description:
 					'',
 				btn: h => {
@@ -207,8 +207,8 @@ export default {
 	watch: {
 		isNeedReloadToBeUpdated(needToReload){
 			if(needToReload.status){
-				this.openNotification();
-				// this.skipWaiting();
+				// this.openNotification();
+				this.skipWaiting();
 			}
 		}
 	}
