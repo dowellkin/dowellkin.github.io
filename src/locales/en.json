@@ -59,6 +59,9 @@
 	"room": "room",
 	"type": "type",
 	"weeks": "weeks",
+	"send": "send",
+	"half": "half",
+	"both": "both",
 
 	"profile": "profile",
 	"link": "link",

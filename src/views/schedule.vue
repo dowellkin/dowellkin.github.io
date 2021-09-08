@@ -4,7 +4,7 @@
 			<div class="admin__buttons" v-if="user.permissions == 'admin' || userinfo.headman == getCurrentGroup" style="margin-bottom: 20px">
 				<a-button-group v-if="isConfigMode">
 					<a-button icon="plus" type="primary" @click="() => $store.commit('edit/showEdit')">
-						{{$t('Добавить занятие')}}
+						{{$t('Add lesson')}}
 					</a-button>
 				</a-button-group>
 				<a-modal

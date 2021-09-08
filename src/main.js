@@ -29,7 +29,7 @@ firebase.initializeApp({
 if(localStorage.getItem('user') != null){
 	const infoFromLocalStore = localStorage.getItem('user');
 	try {
-		console.log('test');
+		// console.log('test');
 		const obj = JSON.parse(infoFromLocalStore);
 		store.commit("SET_FULL_USER", obj);
 		store.commit("setUserLoading", false);
