@@ -18,7 +18,7 @@
 
 		<div class="settings__fields">
 			<template v-if="userinfo != undefined && groups != undefined">
-				<h3>Вы - староста группы &#10024;{{userCyrillic(userinfo.headman.toUpperCase())}}&#10024;</h3>
+				<h3 v-if="userinfo.headman">Вы - староста группы &#10024;{{userCyrillic(userinfo.headman.toUpperCase())}}&#10024;</h3>
 				<a-row type="flex" justify="space-around" style="margin-top: 15px" :gutter="[10, 20]">
 					<a-col :span="24">
 						<p>

@@ -10,7 +10,8 @@ export default {
 			},
 			userLoading: true,
 			groups: null,
-			isConfigure: false
+			// isConfigure: false
+			isConfigure: true // это чисто дебажный момент, нельзя коммитить!
 		},
 		getters: {
 			user(state) {
