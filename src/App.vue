@@ -207,8 +207,8 @@ export default {
 	watch: {
 		isNeedReloadToBeUpdated(needToReload){
 			if(needToReload.status){
-				// this.openNotification();
-				this.skipWaiting();
+				this.openNotification();
+				// this.skipWaiting();
 			}
 		}
 	}
