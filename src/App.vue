@@ -151,7 +151,7 @@ export default {
 		openNotification() {
 			const key = `open${Date.now()}`;
 			this.$notification.open({
-				message: 'new content is avaliable',
+				message: 'new content is avaliable :)',
 				description:
 					'',
 				btn: h => {
