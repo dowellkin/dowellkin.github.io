@@ -9,7 +9,7 @@ export default {
 				userinfo: null,
 			},
 			userLoading: true,
-			groups: null,
+			groups: [],
 			isConfigure: false
 			// isConfigure: true // это чисто дебажный момент, нельзя коммитить!
 		},
@@ -51,12 +51,14 @@ export default {
 				return state.userLoading;
 			},
 			newUserDefaultValues(state, getters){
+				console.log(getters.groups);
 				const data = {
 					permissions: 'user',
 					subgroup: 1,
 					showMySub: true,
 					group: getters.groups[0]
 				}
+				console.log(data)
 				return data;
 			}
 		},
@@ -113,22 +115,20 @@ export default {
 				}
 			},
 			fetchParams(ctx){
-				const db = firebase.database();
-				const groupRef = db.ref('groups/');
-				groupRef.once("value")
-					.then(groups => {
-						if (groups.val() != undefined) {
-							ctx.commit("SET_GROUPS", groups.val().filter(el => !!el));
-							// const driveRef = db.ref('drive/' + ctx.state.user.userinfo.group);
-							// driveRef.once("value")
-							// 	.then(drive => {
-							// 		if (drive.val() != undefined) {
-							// 			ctx.commit("SET_DRIVE", drive.val());
-							// 			ctx.commit("SET_ISDRIVE", true);
-							// 		}
-							// 	})
-						}
-					})
+				return new Promise((resolve, reject) => {
+					const db = firebase.database();
+					const groupRef = db.ref('groups/');
+					groupRef.once("value")
+						.then(groups => {
+							if (groups.val() != undefined) {
+								ctx.commit("SET_GROUPS", groups.val().filter(el => !!el));
+								resolve(groups.val());
+							}
+						})
+						.catch(err => {
+							reject(err)
+						})
+				})
 			}
 		}
 }

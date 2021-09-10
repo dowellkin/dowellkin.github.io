@@ -52,10 +52,10 @@ firebase.auth().onAuthStateChanged(user => {
 					store.commit("SET_PERMISSIONS", snap.val().permissions);
 					store.dispatch("fetchParams");
 				} else {
-					// firebase.database().ref('users/' + savedUser.uid + "/permissions").set("user")
-					// userDB.child("permissions").set("user");
-					// userDB.child("subgroup").set("1");
-					userDB.set(store.getters.newUserDefaultValues)
+					store.dispatch('fetchParams')
+					.then(() => {
+						userDB.set({...store.getters.newUserDefaultValues, email: user.email})
+					})
 				}
 			});
 		userDB.on('value', snap => {
