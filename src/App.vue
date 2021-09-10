@@ -67,7 +67,7 @@
 						<span>{{$t('Google drive')}}</span>
 					</a>
         </a-menu-item> -->
-        <a-menu-item v-if="!user.isUserLoading" key="Links">
+        <a-menu-item v-if="!user.isUserLoading && user.userinfo.group != '-1'" key="Links">
 					<router-link to="/links">
 						<a-icon type="link" />
 						<span>{{$t('link') | capitalize}}</span>

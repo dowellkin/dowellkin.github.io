@@ -192,7 +192,7 @@ export default {
 			return state.days;
 		},
 		getTeachers(state) {
-			return state.teachers;
+			return state.teachers.filter(el => !!el);
 		},
 		getLessons(state) {
 			return state.lessons;

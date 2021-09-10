@@ -27,6 +27,15 @@
 					/>
 				</a-form-item>
 			</a-form>
+			<a-popconfirm
+				title="Are you sure delete this teacher?"
+				ok-text="Yes"
+				cancel-text="No"
+				@confirm="deleteTeacher"
+				@cancel="() => {}"
+			>
+				<a-button type="danger" v-if="modal.id != -1">{{$t('delete') | capitalize}}</a-button>
+			</a-popconfirm>
 		</a-modal>
 		<div v-if="permissions == 'admin'" style="margin-bottom: 15px">
 			<a-button type="primary" icon="plus" @click='showModal("Add teacher")'>{{$t('Add teacher')}}</a-button>
@@ -268,6 +277,20 @@ export default {
       clearFilters();
       this.searchText = '';
     },
+		deleteTeacher(){
+			firebase.database().ref('options/teachers/').update({
+				[this.modal.id]: null
+				}, (error) => {
+					if(error) {
+						this.$message.error(this.$t("Something went wrong."));
+						console.error(error);
+					} else {
+						this.modal.visible = false;
+						this.$message.success(this.$t("Teacher deleted"));
+					}
+				});
+
+		}
 	}
 }
 </script>
