@@ -93,13 +93,26 @@
 			</a-col>
 		</a-row>
 		
-		<a-row>
+		<a-row :gutter="[10, 0]" class="leccon-config__line">
 			<a-col :md="5" :xs="10">
 				{{$t('half') | capitalize}}:
 			</a-col>
 			<a-col :md="8" :xs="14">
 				<a-select :disabled="(user.permissions != 'admin' &&  userinfo.headman != getCurrentGroup) || isDisableAll" :value="getField('half')" @change="(value) => setField('half', value)" style="width: 100%">
-					<a-select-option value="no">{{$t('both')}}</a-select-option>
+					<a-select-option value="0">{{$t('both')}}</a-select-option>
+					<a-select-option value="1">1</a-select-option>
+					<a-select-option value="2">2</a-select-option>
+				</a-select>
+			</a-col>
+		</a-row>
+		
+		<a-row :gutter="[10, 0]" class="leccon-config__line">
+			<a-col :md="5" :xs="10">
+				{{$t('group') | capitalize}}:
+			</a-col>
+			<a-col :md="8" :xs="14">
+				<a-select :disabled="(user.permissions != 'admin' &&  userinfo.headman != getCurrentGroup) || isDisableAll" :value="getField('group')" @change="(value) => setField('group', value)" style="width: 100%">
+					<a-select-option value="0">{{$t('both')}}</a-select-option>
 					<a-select-option value="1">1</a-select-option>
 					<a-select-option value="2">2</a-select-option>
 				</a-select>

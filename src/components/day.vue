@@ -147,9 +147,9 @@ export default {
 		},
 		isSubgroup(task){
 			if(this.user.userinfo){
-				return !!task.group && this.user.userinfo.showMySub != true;
+				return (task.group == 1 || task.group == 2) && this.user.userinfo.showMySub != true;
 			} else {
-				return !!task.group
+				return task.group == 1 || task.group == 2
 			}
 		},
 		isHaveLessonId(task){
@@ -171,8 +171,6 @@ export default {
 			return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 		},
 		calculateBias(encodedTime){
-			// const column = document.querySelectorAll(".day__lines-item")[1];
-			// const columnHeight = column.offsetHeight;
 			const ret = this.remap(encodedTime, this.dayStart*60, this.dayEnd*60, 0, (this.dayEnd-this.dayStart)*this.columnHeight)
 			return ret
 		},
@@ -226,19 +224,22 @@ export default {
 		},
 		handleButttonEdit(task){
 			this.$store.commit('edit/showForEdit');
-			this.$store.commit('edit/setParams', {...task.raw, day: this.index});
-			// this.$emit('configlesson', { task, dayindex: this.index});
+			this.loadParams(task);
 		},
 		handleButtonDetails(task){
 			this.$store.commit('edit/showForLook');
+			this.loadParams(task);
+		},
+		loadParams(task){
+			//отвратительный костыль
+			console.log(`teasss`, task);
+			if(!task.raw.half) task.raw.half = "0"
+			if(!task.raw.group) task.raw.group = "0"
 			this.$store.commit('edit/setParams', {...task.raw, day: this.index});
-			// this.$emit('configlesson', { task, dayindex: this.index});
 		}
 	},
 	mounted(){
-		// console.log(this.day);
 		if(this.index == this.getDay && document.body.clientWidth <= 770){
-			// console.log(this.$el);
 			this.$el.scrollIntoView({block: "center"});
 		}
 	}
@@ -293,7 +294,7 @@ export default {
 	position: relative;
 }
 .day__lines-item{
-	border-top: 1px solid lightgray;
+	border-top: 1px solid #e1e1e1;
 }
 .day__lines-column{
 	position: relative;

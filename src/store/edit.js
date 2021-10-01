@@ -20,7 +20,9 @@ const blank_data = {
 	dayName: '',
 	day: 0,
 	name: '',
-	custom: false
+	custom: false,
+	half: "0",
+	group: "0"
 }
 
 blank_data
@@ -39,7 +41,8 @@ export default {
 			day: 0,
 			name: '',
 			custom: false,
-			half: 'no'
+			half: "0",
+			group: "0"
 		},
 		edit: false,
 		showfield: false,
@@ -48,6 +51,7 @@ export default {
 	},
 	mutations: {
 		setParams(state, data){
+			console.log(`mutate`, data);
 			state.fields = Object.assign(state.fields, data);
 		},
 		showForEdit(state){
@@ -80,7 +84,7 @@ export default {
 	},
 	actions: {
 		setParams(ctx, data){
-			// console.log(data);
+			console.log(data);
 			ctx.commit('setParams', data);
 
 			if(data.lessonId != undefined){

@@ -160,13 +160,13 @@ export default {
 							if (pair.teacherId >= 0)
 								pair.teacher = state.teachers[pair.teacherId];
 							
-							if(pair.half == "1" || pair.half == undefined){
+							if(pair.half != 2){
 								// console.log(pair.lessonNumber);
 								pair.startTime = state.rings[pair.lessonNumber][0][0];
 								pair.endTime = state.rings[pair.lessonNumber][0][1];
 								dayArr.push(pair);
 							}
-							if(pair.half == "2" || pair.half == undefined){
+							if(pair.half != 1){
 								let anotherPair = JSON.parse(JSON.stringify(pair));
 								anotherPair.startTime = state.rings[anotherPair.lessonNumber][1][0];
 								anotherPair.endTime = state.rings[anotherPair.lessonNumber][1][1];
