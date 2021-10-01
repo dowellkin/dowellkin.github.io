@@ -24,8 +24,8 @@ module.exports = {
 			name: "SCHEDO",
 			themeColor: '#1890ff',
 			msTileColor: '#1890ff',
-  		background_color: "#001529",
 			manifestOptions: {
+  			background_color: "#001529",
 				"icons": [
 					{
 						"src": "img/icons/maskable/maskable_icon_x48.png",
@@ -169,12 +169,27 @@ module.exports = {
 
 				shortcuts: [
 					{
-						name: "Schedule",
-						url: "/"
+						name: "Расписание",
+						url: "/",
+						icons: [
+							{
+								"src": "img/icons/shortcuts/schedule.png",
+								"type": "image/png",
+								"sizes": "96x96"
+							}		
+						]
+
 					},
 					{
-						name: "links",
-						url: "/links/"
+						name: "Ссылки",
+						url: "/links/",
+						icons: [
+							{
+								"src": "img/icons/shortcuts/link.png",
+								"type": "image/png",
+								"sizes": "96x96"
+							}		
+						]
 					}
 				]
 			},
