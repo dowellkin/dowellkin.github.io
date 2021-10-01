@@ -51,14 +51,12 @@ export default {
 				return state.userLoading;
 			},
 			newUserDefaultValues(state, getters){
-				console.log(getters.groups);
 				const data = {
 					permissions: 'user',
 					subgroup: 1,
 					showMySub: true,
 					group: getters.groups[0]
 				}
-				console.log(data)
 				return data;
 			}
 		},
