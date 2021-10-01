@@ -30,19 +30,38 @@ Vue.use(VueRouter)
 		component: () => import('../views/auth.vue')
 	},
 	{
-		path: '/teachers',
+		path: '/db',
+		name: 'Database',
+		component: () => import('../views/db.vue')
+	},
+	{
+		path: '/db/teachers',
 		name: 'Teachers',
-		component: () => import('../views/teachers.vue')
+		component: () => import('../views/teachers.vue'),
+		meta: {
+			breadcrumbs: [
+				{
+					name: 'Database'
+				}
+			]
+		}
+	},
+	{
+		path: '/db/lessons',
+		name: 'Lessons',
+		component: () => import('../views/lessons.vue'),
+		meta: {
+			breadcrumbs: [
+				{
+					name: 'Database'
+				}
+			]
+		}
 	},
 	{
 		path: '/links',
 		name: 'Links',
 		component: () => import('../views/links.vue')
-	},
-	{
-		path: '/lessons',
-		name: 'Lessons',
-		component: () => import('../views/lessons.vue')
 	},
 	{
 		path: '/*',

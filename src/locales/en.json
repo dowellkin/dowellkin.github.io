@@ -12,11 +12,13 @@
 	"Yes": "Yes",
 	"No": "No",
 
+	"group": "group",
 	"it041": "it041",
 	"it042": "it042",
 	"sp041": "sp041",
 
 	"Teachers": "Teachers",
+	"Database": "Database",
 
 	"Add teacher": "Add teacher",
 	"Сhange": "Сhange",

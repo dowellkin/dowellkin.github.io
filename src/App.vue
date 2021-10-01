@@ -37,38 +37,26 @@
 			</div>
       <a-menu theme="dark" v-model="current" :default-selected-keys="['Schedule']" mode="inline">
         <a-menu-item key="Schedule">
-					<router-link to="/">
+					<router-link :to="{name: 'Schedule'}">
 						<a-icon type="calendar" />
 						<span>{{$t('Schedule')}}</span>
 					</router-link>
         </a-menu-item>
-        <a-menu-item key="Teachers">
-					<router-link to="/teachers">
-						<a-icon type="team" />
-						<span>{{$t('Teachers')}}</span>
-					</router-link>
-        </a-menu-item>
-        <a-menu-item key="Lessons">
-					<router-link to="/lessons">
+				<a-menu-item key="Database">
+					<router-link :to="{name: 'Database'}">
 						<a-icon type="book" />
-						<span>{{$t('Lessons')}}</span>
+						<span>{{$t('Database') | capitalize}}</span>
 					</router-link>
         </a-menu-item>
         <a-menu-item key="Auth">
-					<router-link to="/auth">
+					<router-link :to="{name: 'Auth'}">
 						<a-icon v-if="isUserLoading" type="loading" />
 						<a-icon v-else type="user" />
 						<span>{{$t('profile') | capitalize}}</span>
 					</router-link>
         </a-menu-item>
-        <!-- <a-menu-item v-if="user.isDrive" key="Google drive">
-					<a :href="user.drive">
-						<a-icon type="cloud-download" />
-						<span>{{$t('Google drive')}}</span>
-					</a>
-        </a-menu-item> -->
         <a-menu-item v-if="!user.isUserLoading && user.userinfo.group != '-1'" key="Links">
-					<router-link to="/links">
+					<router-link :to="{name: 'Links'}">
 						<a-icon type="link" />
 						<span>{{$t('link') | capitalize}}</span>
 					</router-link>
@@ -78,7 +66,12 @@
     <a-layout>
       <a-layout-content style="margin: 0 16px">
         <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item>{{breakcrubsText(current[0]) | capitalize}}</a-breadcrumb-item>
+          <a-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbs" :key="index">
+						<router-link :to="{name: breadcrumb.name}">
+							{{$t(breadcrumb.name) | capitalize}}
+						</router-link>
+					</a-breadcrumb-item>
+          <a-breadcrumb-item>{{$t(currentBreadcrumb) | capitalize}}</a-breadcrumb-item>
         </a-breadcrumb>
         <div class="mainView">
 					<router-view />
@@ -175,24 +168,19 @@ export default {
 				key,
 				onClose: close,
 			});
+		},
+		setCurrent(route){
+			this.current[0] = route.name;
 		}
 	},
 	created(){
 		this.$router.onReady(() => {
-			if(this.$router.currentRoute.name == 'groupSchedule'){
-				this.current[0] = this.$router.currentRoute.params.group.toUpperCase()
-			} else {
-				this.current[0] = this.$router.currentRoute.meta?.breadcrumbName || this.$router.currentRoute.name;
-			}
+			this.setCurrent(this.$router.currentRoute)
     });
 		this.$store.dispatch('loadAll');
 		this.$store.dispatch('updateTime')
 		this.$router.beforeEach((to, from, next) => {
-			if(to.name == 'groupSchedule'){
-				this.current[0] = to.params.group.toUpperCase()
-			} else {
-				this.current[0] = to.meta?.breadcrumbName || to.name;
-			}
+			this.setCurrent(to)
 			// this.current[0] = to.meta?.breadcrumbName || to.name;
 			next();
 		})
@@ -202,6 +190,18 @@ export default {
 		...mapGetters('app', ['isNeedReloadToBeUpdated']),
 		visiblePopup(){
 			return this.collapsed && this.visible;
+		},
+		currentBreadcrumb(){
+			
+			let route = this.$route ?? {}
+			if(route.name == 'groupSchedule'){
+				return route.params.group.toUpperCase()
+			} else {
+				return route.meta?.breadcrumbName || route.name;
+			}
+		},
+		breadcrumbs(){
+			return this.$route.meta.breadcrumbs ?? []
 		}
 	},
 	watch: {
