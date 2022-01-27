@@ -46,7 +46,7 @@ export default {
 		getSavedWeek(state){
 			return state.savedWeek;
 		},
-		getWeekNum(){
+		getWeekNum(state, getters, rootState, rootGetters = 0){
 			let thisYear = new Date().getFullYear();
 			let firstDay = new Date(0);
 			firstDay.setFullYear(thisYear);
@@ -57,7 +57,7 @@ export default {
 			let now = new Date().getTime();
 
 			let week = Math.floor((now - firstDay) / weekMil);
-			let ret = (week - 2) % 4;
+			let ret = ((week - 2) + rootGetters.getOffset) % 4;
 			return  ret == 0? 4 : ret;
 		},
 		getWeek(state, getters) {

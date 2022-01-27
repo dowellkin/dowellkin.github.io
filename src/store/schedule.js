@@ -32,6 +32,7 @@ export default {
 				ctx.commit('saveLessons', data.lessons);
 				ctx.commit('saveRings', data.rings);
 				ctx.commit('saveTeachers', data.teachers);
+				ctx.commit('setOffset', data.offset);
 			}
 			const db = firebase.database()
 			// ctx.commit('makeIsLoading', true);
@@ -58,6 +59,7 @@ export default {
 				ctx.commit('saveLessons', data.lessons);
 				ctx.commit('saveRings', data.rings);
 				ctx.commit('saveTeachers', data.teachers);
+				ctx.commit('setOffset', data.offset);
 			}
 			await ctx.dispatch("loadOptions");
 			ctx.commit('makeIsLoading', false);
@@ -89,7 +91,8 @@ export default {
 		teachers: [],
 		links: {},
 		isLoading: false,
-		currentGroup: ''
+		currentGroup: '',
+		weekOffset: 0
 	},
 
 	mutations: {
@@ -127,6 +130,9 @@ export default {
 		setCurrentGroup(state, data){
 			state.currentGroup = data;
 		},
+		setOffset(state, data){
+			state.weekOffset = data
+		}
 	},
 	
 	getters: {
@@ -202,6 +208,9 @@ export default {
 		},
 		getCurrentGroup(state){
 			return state.currentGroup;
+		},
+		getOffset(state){
+			return state.weekOffset ?? 0
 		}
 	}
 }
