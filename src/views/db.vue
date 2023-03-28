@@ -1,6 +1,8 @@
 <template>
-	<div class="database">
-		<a-button v-for="table in tables" :key="table.name" @click="() => $router.push({name: table.routeName})">{{$t(table.routeName)}}</a-button>
+	<div class="container">
+		<div class="database">
+			<a-button v-for="table in tables" :key="table.name" @click="() => $router.push({name: table.routeName})">{{$t(table.routeName)}}</a-button>
+		</div>
 	</div>
 </template>
 

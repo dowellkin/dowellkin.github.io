@@ -215,7 +215,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import "./main.scss";
 
 #components-layout .logo {
   height: 32px;

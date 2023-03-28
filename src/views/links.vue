@@ -1,60 +1,62 @@
 <template>
-	<div class="links">
-		&#10024; hello c: &#10024;
-		<div class="links__container">
-			<div v-for="(link, key) in getLinks" :key="key" class="link">
-				<a target="_blank" :href="link">{{key}}</a>
-			</div>
-		</div>
-
-		<div v-if="(user.permissions == 'admin' || userinfo.headman == getCurrentGroup) && isConfigMode " class="actions">
-
-			<div v-if="(user.permissions == 'admin' || userinfo.headman == getCurrentGroup) && isConfigMode " class="links-action links-add">
-				<header class="links-action__header">
-					<h3>Add link</h3>
-				</header>
-				<main class="links-action__main">
-					<div class="links-action__item">
-						title: <a-input v-model="linkAdd.title"></a-input>
-					</div>
-					<div class="links-action__item">
-						link: <a-input v-model="linkAdd.url"></a-input>
-					</div>
-					<div class="links-action__item">
-						<a-row type="flex" justify="end" :gutter='[10, 10]'>
-							<a-col>
-								<a-button type="danger" @click='clearAddLink'>Clear</a-button>
-							</a-col>
-							<a-col>
-								<a-button type="primary" @click="sendNewLink">Send</a-button>
-							</a-col>
-						</a-row>
-					</div>
-				</main>
+	<div class="container">
+		<div class="links">
+			&#10024; hello c: &#10024;
+			<div class="links__container">
+				<div v-for="(link, key) in getLinks" :key="key" class="link">
+					<a target="_blank" :href="link">{{key}}</a>
+				</div>
 			</div>
 
-			<div v-if="(user.permissions == 'admin' || userinfo.headman == getCurrentGroup) && isConfigMode " class="links-action links-remove">
-				<header class="links-action__header">
-					<h3>Remove link</h3>
-				</header>
-				<main class="links-action__main">
-					<div class="links-action__item">
-						title: 
-						<a-select show-search v-model="linkRemove.title" style="width: 100%">
-							<a-select-option v-for="(link, key) in getLinks" :value="key" :key="key">{{key}}</a-select-option>
-						</a-select>
-					</div>
-					<div class="links-action__item">
-						<a-row type="flex" justify="end" :gutter='[10, 10]'>
-							<a-col>
-								<a-button type="danger" @click='clearRemoveLink'>Clear</a-button>
-							</a-col>
-							<a-col>
-								<a-button type="primary" @click="removeLink">Send</a-button>
-							</a-col>
-						</a-row>
-					</div>
-				</main>
+			<div v-if="(user.permissions == 'admin' || userinfo.headman == getCurrentGroup) && isConfigMode " class="actions">
+
+				<div v-if="(user.permissions == 'admin' || userinfo.headman == getCurrentGroup) && isConfigMode " class="links-action links-add">
+					<header class="links-action__header">
+						<h3>Add link</h3>
+					</header>
+					<main class="links-action__main">
+						<div class="links-action__item">
+							title: <a-input v-model="linkAdd.title"></a-input>
+						</div>
+						<div class="links-action__item">
+							link: <a-input v-model="linkAdd.url"></a-input>
+						</div>
+						<div class="links-action__item">
+							<a-row type="flex" justify="end" :gutter='[10, 10]'>
+								<a-col>
+									<a-button type="danger" @click='clearAddLink'>Clear</a-button>
+								</a-col>
+								<a-col>
+									<a-button type="primary" @click="sendNewLink">Send</a-button>
+								</a-col>
+							</a-row>
+						</div>
+					</main>
+				</div>
+
+				<div v-if="(user.permissions == 'admin' || userinfo.headman == getCurrentGroup) && isConfigMode " class="links-action links-remove">
+					<header class="links-action__header">
+						<h3>Remove link</h3>
+					</header>
+					<main class="links-action__main">
+						<div class="links-action__item">
+							title: 
+							<a-select show-search v-model="linkRemove.title" style="width: 100%">
+								<a-select-option v-for="(link, key) in getLinks" :value="key" :key="key">{{key}}</a-select-option>
+							</a-select>
+						</div>
+						<div class="links-action__item">
+							<a-row type="flex" justify="end" :gutter='[10, 10]'>
+								<a-col>
+									<a-button type="danger" @click='clearRemoveLink'>Clear</a-button>
+								</a-col>
+								<a-col>
+									<a-button type="primary" @click="removeLink">Send</a-button>
+								</a-col>
+							</a-row>
+						</div>
+					</main>
+				</div>
 			</div>
 		</div>
 	</div>
