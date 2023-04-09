@@ -30,20 +30,7 @@ blank_data
 export default {
 	namespaced: true,
 	state: {
-		fields: {
-			lessonId: 0,
-			teacherId: 0,
-			lessonNumber: 0,
-			type: '',
-			room: '',
-			weeks: weeksChecked,
-			dayName: '',
-			day: 0,
-			name: '',
-			custom: false,
-			half: "0",
-			group: "0"
-		},
+		fields: {...blank_data},
 		edit: false,
 		showfield: false,
 		loading: false,
@@ -51,7 +38,6 @@ export default {
 	},
 	mutations: {
 		setParams(state, data){
-			console.log(`mutate`, data);
 			state.fields = Object.assign(state.fields, data);
 		},
 		showForEdit(state){
@@ -84,7 +70,6 @@ export default {
 	},
 	actions: {
 		setParams(ctx, data){
-			console.log(data);
 			ctx.commit('setParams', data);
 
 			if(data.lessonId != undefined){
@@ -111,7 +96,9 @@ export default {
 			delete data.day;
 			delete data.rawIndex;
 			
-			data.name = ctx.rootGetters.getLessons[data.lessonId];
+			if( ~data.lessonId ) {
+				data.name = ctx.rootGetters.getLessons[data.lessonId];
+			}
 			
 			if(![1,2].includes(+data.half)){
 				delete data.half;
@@ -163,7 +150,6 @@ function sendPair(path, index, data) {
 	if(index == undefined){
 		throw 'index is underfined. Can\'t push data.';
 	}
-	// console.log('send');
 	return new Promise( (resolve, reject) => {
 		firebase.database().ref(path).update({
 			[index]: data

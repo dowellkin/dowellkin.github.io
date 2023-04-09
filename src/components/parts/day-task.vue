@@ -83,6 +83,9 @@ export default {
         },
         columnHeight: {
             type: Number
+        },
+        dayIndex: {
+            type: Number
         }
     },
     data: () => ({
@@ -120,7 +123,6 @@ export default {
             const time = task.startTime.split(":");
 			const encodedTime = parseInt(time[0], 10)*60 + parseInt(time[1], 10);
 			
-            console.log(task, this.calculateBias(encodedTime))
 			return this.calculateBias(encodedTime);
 		},
 		getTaskHight(task){
@@ -148,11 +150,9 @@ export default {
 			this.loadParams(task);
 		},
 		loadParams(task){
-			//отвратительный костыль
-			console.log(`teasss`, task);
 			if(!task.raw.half) task.raw.half = "0"
 			if(!task.raw.group) task.raw.group = "0"
-			this.$store.commit('edit/setParams', {...task.raw, day: this.index});
+			this.$store.commit('edit/setParams', { ...task.raw, day: this.dayIndex });
 		},
 		calculateBias(encodedTime) {
             const ret = this.remap(encodedTime, this.dayStart * 60, this.dayEnd * 60, 0, (this.dayEnd - this.dayStart) * this.columnHeight)

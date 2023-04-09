@@ -31,7 +31,12 @@
 				{{$t('day of week') | capitalize}}: 
 			</a-col>
 			<a-col span=18>
-				<a-select :disabled="(user.permissions != 'admin' &&  userinfo.headman != getCurrentGroup) || isDisableAll" :value="getField('day').toString()" @change="(value) => setField('day', +value)" style="width: 100%">
+				<a-select
+					:disabled="(user.permissions != 'admin' &&  userinfo.headman != getCurrentGroup) || isDisableAll"
+					:value="getField('day').toString()"
+					@change="(value) => setField('day', +value)"
+					style="width: 100%"
+				>
 					<a-select-option v-for="t_day in Object.entries(getDays)" :key="t_day[0]" :value="t_day[0]">
 						{{$t(t_day[1])}}
 					</a-select-option>
@@ -61,7 +66,7 @@
 					</a-col>
 					<a-col span=14>
 						<a-select :disabled="(user.permissions != 'admin' &&  userinfo.headman != getCurrentGroup) || isDisableAll" :value="getField('type')" @change="(value) => setField('type', value)" style="width: 100%">
-							<a-select-option v-for="type in types" :key="type" :value="type">{{type}}</a-select-option>
+							<a-select-option v-for="local_type in types" :key="local_type" :value="local_type">{{ local_type }}</a-select-option>
 						</a-select>
 					</a-col>
 				</a-row>				
@@ -206,14 +211,14 @@ export default {
 				result[index] = val.indexOf(index+1) != -1
 			});
 			return result;
+		},
+		getField(name) {
+			return this.getParams[name]
 		}
 	},
 	computed: {
 		...mapGetters(['user', 'getTeachers', 'getLessons', 'getDays', 'userinfo', 'getCurrentGroup']), 
-		...mapGetters('edit', ['getParams', 'getWeeks', 'isLoading', 'isEdit', 'isDisableAll']),
-		getField(){
-			return (name) => this.getParams[name];
-		},
+		...mapGetters('edit', ['getParams', 'isLoading', 'isEdit', 'isDisableAll']),
 		sortedTeachers(){
 			let temp = JSON.parse(JSON.stringify(this.getTeachers));
 			temp.sort( (a,b) => {

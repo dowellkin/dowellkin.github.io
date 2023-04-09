@@ -25,12 +25,13 @@
 					<div class="day__tasks">
 						<transition-group name="swing">
 							<dayTask
-								v-for="(task, index) in day"
-								:key="task.lessonNumber + '' + index"
+								v-for="(task, taskIndex) in day"
+								:key="task.lessonNumber + '' + taskIndex"
 								:task="task"
 								:dayStart="dayStart"
 								:dayEnd="dayEnd"
 								:columnHeight="columnHeight"
+								:dayIndex="index"
 							></dayTask>
 						</transition-group>
 					</div>

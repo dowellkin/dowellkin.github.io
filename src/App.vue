@@ -1,87 +1,87 @@
 <template>
-  <a-layout id="components-layout" style="min-height: 100vh" :style="{'padding-left': '80px'}" ref="root">
-    <a-layout-sider v-model="collapsed" collapsible :style="{'position': 'fixed', 'height': '100%', 'left': 0, 'z-index': 2}">
-      <div class="logo">
+	<a-layout id="components-layout" style="min-height: 100vh" :style="{'padding-left': '80px'}" ref="root">
+		<a-layout-sider v-model="collapsed" collapsible :style="{'position': 'fixed', 'height': '100%', 'left': 0, 'z-index': 2}">
+		<div class="logo">
 
-				<a-popover v-model="visiblePopup" :title="$t('Week choise')" placement="bottomLeft" trigger="focus">
-					<div slot="content" @click="weekChoise" style="display: flex; justify-content: space-around; align-items: center">
-						<p
-							v-for="week in weeks"
-							:key="week"
-							class="weekChoice"
-							:class="{ current:getWeekNum==week, chosen:getWeek==week }"
-							@click="makeWeek(week)"
-						>
-							{{week}}
-						</p>
-					</div>
-					<div @click="weekChoise" :class="{ maxwidth:collapsed, fullsize: !collapsed }">
-						<template v-if="collapsed">
-							{{getWeek}}
-						</template>
-						
-						<p
-							v-else
-							v-for="week in weeks"
-							:key="week"
-							class="weekChoice uncollapsed"
-							:class="{ current:getWeekNum==week, chosen:getWeek==week }"
-							@click="makeWeek(week, inner)"
-						>
-							{{week}}
-						</p>
+					<a-popover v-model="visiblePopup" :title="$t('Week choise')" placement="bottomLeft" trigger="focus">
+						<div slot="content" @click="weekChoise" style="display: flex; justify-content: space-around; align-items: center">
+							<p
+								v-for="week in weeks"
+								:key="week"
+								class="weekChoice"
+								:class="{ current:getWeekNum==week, chosen:getWeek==week }"
+								@click="makeWeek(week)"
+							>
+								{{week}}
+							</p>
+						</div>
+						<div @click="weekChoise" :class="{ maxwidth:collapsed, fullsize: !collapsed }">
+							<template v-if="collapsed">
+								{{getWeek}}
+							</template>
+							
+							<p
+								v-else
+								v-for="week in weeks"
+								:key="week"
+								class="weekChoice uncollapsed"
+								:class="{ current:getWeekNum==week, chosen:getWeek==week }"
+								@click="makeWeek(week, inner)"
+							>
+								{{week}}
+							</p>
 
-					</div>
-				</a-popover>
-				
-			</div>
-      <a-menu theme="dark" v-model="current" :default-selected-keys="['Schedule']" mode="inline">
-        <a-menu-item key="Schedule">
-					<router-link :to="{name: 'Schedule'}">
-						<a-icon type="calendar" />
-						<span>{{$t('Schedule')}}</span>
-					</router-link>
-        </a-menu-item>
-				<a-menu-item key="Database">
-					<router-link :to="{name: 'Database'}">
-						<a-icon type="book" />
-						<span>{{$t('Database') | capitalize}}</span>
-					</router-link>
-        </a-menu-item>
-        <a-menu-item key="Auth">
-					<router-link :to="{name: 'Auth'}">
-						<a-icon v-if="isUserLoading" type="loading" />
-						<a-icon v-else type="user" />
-						<span>{{$t('profile') | capitalize}}</span>
-					</router-link>
-        </a-menu-item>
-        <a-menu-item v-if="!user.isUserLoading && user.userinfo.group != '-1'" key="Links">
-					<router-link :to="{name: 'Links'}">
-						<a-icon type="link" />
-						<span>{{$t('link') | capitalize}}</span>
-					</router-link>
-        </a-menu-item>
-      </a-menu>
-    </a-layout-sider>
-    <a-layout>
-      <a-layout-content style="margin: 0 16px">
-        <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbs" :key="index">
-						<router-link :to="{name: breadcrumb.name}">
-							{{$t(breadcrumb.name) | capitalize}}
+						</div>
+					</a-popover>
+					
+				</div>
+		<a-menu theme="dark" v-model="current" :default-selected-keys="['Schedule']" mode="inline">
+			<a-menu-item key="Schedule">
+						<router-link :to="{name: 'Schedule'}">
+							<a-icon type="calendar" />
+							<span>{{$t('Schedule')}}</span>
 						</router-link>
-					</a-breadcrumb-item>
-          <a-breadcrumb-item>{{$t(currentBreadcrumb) | capitalize}}</a-breadcrumb-item>
-        </a-breadcrumb>
-        <div class="mainView">
-					<router-view />
-        </div>
-      </a-layout-content>
-      <a-layout-footer style="text-align: center">
-        {{$t('Schedule') | capitalize}} ©2020 Created by <a href="tg://resolve?domain=dowellkin">Korolev Alexandr</a>
-      </a-layout-footer>
-    </a-layout>
-  </a-layout>
+			</a-menu-item>
+					<a-menu-item key="Database">
+						<router-link :to="{name: 'Database'}">
+							<a-icon type="book" />
+							<span>{{$t('Database') | capitalize}}</span>
+						</router-link>
+			</a-menu-item>
+			<a-menu-item key="Auth">
+						<router-link :to="{name: 'Auth'}">
+							<a-icon v-if="isUserLoading" type="loading" />
+							<a-icon v-else type="user" />
+							<span>{{$t('profile') | capitalize}}</span>
+						</router-link>
+			</a-menu-item>
+			<a-menu-item v-if="!user.isUserLoading && user.userinfo.group != '-1'" key="Links">
+						<router-link :to="{name: 'Links'}">
+							<a-icon type="link" />
+							<span>{{$t('link') | capitalize}}</span>
+						</router-link>
+			</a-menu-item>
+		</a-menu>
+		</a-layout-sider>
+		<a-layout>
+		<a-layout-content style="margin: 0 16px">
+			<a-breadcrumb style="margin: 16px 0">
+			<a-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbs" :key="index">
+							<router-link :to="{name: breadcrumb.name}">
+								{{$t(breadcrumb.name) | capitalize}}
+							</router-link>
+						</a-breadcrumb-item>
+			<a-breadcrumb-item>{{$t(currentBreadcrumb) | capitalize}}</a-breadcrumb-item>
+			</a-breadcrumb>
+			<div class="mainView">
+						<router-view />
+			</div>
+		</a-layout-content>
+		<a-layout-footer style="text-align: center">
+			{{$t('Schedule') | capitalize}} ©2020 Created by <a href="tg://resolve?domain=dowellkin">Korolev Alexandr</a>
+		</a-layout-footer>
+		</a-layout>
+	</a-layout>
 </template>
 
 <script>
