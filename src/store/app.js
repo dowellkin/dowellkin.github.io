@@ -4,13 +4,18 @@ export default {
 	state: {
 		update: {
 			worker: null,
-			status: false
+			status: false,
+			group: null
 		}
 	},
 	mutations: {
 		setUpdate(state, value) {
 			// console.log(value);
 			state.update = value;
+		},
+		setGroup(state, value) {
+			// console.log(value);
+			state.group = value;
 		}
 	},
 	actions: {
@@ -18,6 +23,9 @@ export default {
 	getters: {
 		isNeedReloadToBeUpdated(state){
 			return state.update;
+		},
+		group(state) {
+			return state.group;
 		}
 	}
 }
